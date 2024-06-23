@@ -23,14 +23,12 @@
   <!-- end dark theme -->
 
   <!-- background -->
-  <style>
-    body {
-      background-image: linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)), url("/media/global/bg.jpeg");
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-    }
-  </style> 
+  <script>
+    let choice = Math.floor(Math.random()* 6);
+    let url = concat("\"/media/global/bg", choice.toString(), ".jpeg\'")
+    let result = "linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7))";
+    result = concat(result, ", url(", url, ") no-repeat fixed cover")
+  </script>
   <!-- end background -->
 
   <!-- mathjax support -->
