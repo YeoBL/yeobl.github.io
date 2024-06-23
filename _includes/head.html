@@ -21,22 +21,6 @@
     DarkReader.auto( {brightness: 100, contrast: 90, sepia: 10} );
   </script>
   <!-- end dark theme -->
-  
-  <!-- background -->
-  <script>
-    var images = ['bg0.jpeg', 'bg1.jpeg', 'bg2.jpeg', 'bg3.jpeg', 'bg4.jpeg', 'bg5.jpeg'];
-    let image = images[Math.floor(Math.random() * images.length)];
-    document.body.style.backgroundImage = "url(\'/media/global/" + image + "\')";
-  </script>
-  <!-- background-image: linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)), url("/media/global/bg4.jpeg"); -->
-  <style>
-    body {
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-    }
-  </style> 
-  <!-- end background -->
 
   <!-- mathjax support -->
   <script type="text/javascript" id="MathJax-script" async
@@ -64,4 +48,21 @@
 
   <script type="text/javascript"> hljs.highlightAll(); </script>
   <!-- end highlight.js support -->
+
+  
+  <!-- background -->
+  <!-- background-image: linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)), url("/media/global/bg4.jpeg"); -->
+  <style>
+    body {
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+  </style> 
+  <script>
+    var images = ['bg0.jpeg', 'bg1.jpeg', 'bg2.jpeg', 'bg3.jpeg', 'bg4.jpeg', 'bg5.jpeg'];
+    let image = images[Math.floor(Math.random() * images.length)];
+    document.body.style.backgroundImage = "url(\'/media/global/" + image + "\')";
+  </script>
+  <!-- end background -->
 </head>
