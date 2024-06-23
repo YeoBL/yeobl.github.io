@@ -30,11 +30,7 @@ For some binomial distribution $X\sim{B(n, p)}$, we let $np = \lambda$. If the f
 1. $n$ is large
 2. $p$ is small
 
-Then we can apply the formula 
-
-$$
-P(X = r) = e^{-\lambda}\cdot\frac{\lambda^{r}}{r!}
-$$
+Then we can apply the formula $P(X = r) = e^{-\lambda}\cdot\frac{\lambda^{r}}{r!}$
 
 #### Derivation 
 
