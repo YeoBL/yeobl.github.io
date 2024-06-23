@@ -74,7 +74,7 @@ We have shown that for some binomial distribution $X\sim{B(n, p)}$, under condit
 
 $$
 \begin{align*}
-P(X = r) &= \binom{n}{r}p^r(1-p)^{n-r} \\
+P(X = r) &= \binom{n}{r}\cdotp^r(1-p)^{n-r} \\
 &\approx e^{-\lambda}\cdot\frac{\lambda^r}{r!}
 \end{align*}
 $$
