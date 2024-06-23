@@ -32,7 +32,7 @@ ForEach ($thing in $things) {
 ```
 #### Some Mathjax I was trying out
 
-Seperate Math Code Blocks Indented To Equal Sign 
+Seperate Math Code Blocks Indented To Equal Sign   
 $$
 \begin{align*}
 1 + 2x + x^2 &= 1 \cdot (1 + x) + x \cdot (1 + x) \\
