@@ -67,7 +67,7 @@ $$
 This summation happens to be the McLaurin expansion of $e^\lambda$. By the **Law Of Total Probability**, all probabilities must add up to 1. Hence, we divide all the terms by $e^\lambda$ for this to remain a valid probability distribution.  
 
 $$
-e^{-\lambda} + e^{-\lambda}{\lambda} + e^{-\lambda}\frac{\lambda^2}{2!} + e^{-\lambda}\frac{\lambda^3}{3!} + e^{-\lambda}\frac{\lambda^4}{4!} + e^{-\lambda}\frac{\lambda^5}{5!} + \dots
+e^{-\lambda} + e^{-\lambda}\cdot{\lambda} + e^{-\lambda}\cdot\frac{\lambda^2}{2!} + e^{-\lambda}\cdot\frac{\lambda^3}{3!} + e^{-\lambda}\cdot\frac{\lambda^4}{4!} + e^{-\lambda}\cdot\frac{\lambda^5}{5!} + \dots
 $$
 
 We have shown that for some binomial distribution $X\sim{B(n, p)}$, under conditions $(1)$ and $(2)$,  
@@ -75,6 +75,6 @@ We have shown that for some binomial distribution $X\sim{B(n, p)}$, under condit
 $$
 \begin{align*}
 P(X = r) &= \binom{n}{r}p^r(1-p)^{n-r} \\
-&\approx e^{-\lambda}\frac{\lambda^r}{r!}
+&\approx e^{-\lambda}\cdot\frac{\lambda^r}{r!}
 \end{align*}
 $$
