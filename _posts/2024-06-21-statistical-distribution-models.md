@@ -1,7 +1,8 @@
-## Cool Statistical Distribution Models  
 ---
-tags: stats
---- 
+tags: statistics
+---
+
+## Cool Statistical Distribution Models  
 
 ### Poisson's Distribution
 
