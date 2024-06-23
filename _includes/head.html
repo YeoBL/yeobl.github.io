@@ -9,6 +9,31 @@
     {%- include google-analytics.html -%}
   {%- endif -%}
 
+  <!-- background -->
+  <style>
+    body {
+      background-image: linear-gradient(rgba(127,227,235,0.7), rgba(24,237,130,0.7)), url("/media/global/bg.jpeg");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+  </style> 
+  <!-- end background -->
+
+  <!-- mathjax support -->
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+      }
+    };
+  </script>
+  <!-- end mathjax support -->
+
   <!-- highlight.js support -->
   <link rel="stylesheet" href="/js/highlightjs/styles/github.css">
   <link rel="stylesheet" href="/js/highlightjs/styles/ssms.css" />
