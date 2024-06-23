@@ -21,13 +21,16 @@
     DarkReader.auto( {brightness: 100, contrast: 90, sepia: 10} );
   </script>
   <!-- end dark theme -->
+  
   <!-- background -->
   <script>
-    var images = ['bg0.jpeg', 'image2.jpg', 'image3.jpg', 'image4.jpg', 'image5.jpg'];
+    var images = ['bg0.jpeg', 'bg1.jpeg', 'bg2.jpeg', 'bg3.jpeg', 'bg4.jpeg', 'bg5.jpeg'];
+    let image = images[Math.floor(Math.random() * images.length)];
+    document.body.style.backgroundImage = "url(" + image + ")";
   </script>
+  <!-- background-image: linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)), url("/media/global/bg4.jpeg"); -->
   <style>
     body {
-      background-image: linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)), url("/media/global/bg4.jpeg");
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
