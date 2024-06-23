@@ -30,3 +30,26 @@ ForEach ($thing in $things) {
     Write-Output "It highlights it using the GitHub style"
 }
 ```
+#### Some Mathjax I was trying out
+
+Seperate Math Code Blocks Indented To Equal Sign 
+$$
+\begin{align*}
+1 + 2x + x^2 &= 1 \cdot (1 + x) + x \cdot (1 + x) \\
+&= (1 + x)^2 &&
+\end{align*}
+$$
+
+
+De Morgan's Law:  
+$\lnot({p}\land{q})\equiv\lnot{p}\lor\lnot{q}$  
+$\lnot({p}\lor{q})\equiv\lnot{p}\land\lnot{q}$
+
+Geometric Progression:  
+$\sum\limits_{i=0}^{n}x^i=\frac{1-x^{n+1}}{1-x}$
+
+Combination:  
+$\sum\limits_{i=0}^{n}{n\choose{i}}=2^n$
+
+Probability:  
+$\sum\limits_{all\,x}{P(X = x)} = 1$
