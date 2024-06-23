@@ -26,11 +26,10 @@
   <script>
     var images = ['bg0.jpeg', 'bg1.jpeg', 'bg2.jpeg', 'bg3.jpeg', 'bg4.jpeg', 'bg5.jpeg'];
     let image = images[Math.floor(Math.random() * images.length)];
-    window.onload = function(){document.body.style.backgroundImage = "url(\'/media/global/" + image + "\')";}
+    window.onload = function(){document.body.style.backgroundImage = "linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)) url(\'/media/global/" + image + "\')";}
   </script>
   <style>
     body {
-      background-image: linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7));
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
