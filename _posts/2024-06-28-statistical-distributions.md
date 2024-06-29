@@ -92,5 +92,3 @@ Test table:
 | merge right ||       |
 | merge|       |       |
 | below|^      |^      |
-| merge both  || value1|
-|^            || value2|
