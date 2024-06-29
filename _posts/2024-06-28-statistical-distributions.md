@@ -84,63 +84,8 @@ $$
 
 To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it against the Binomial Distribution $B(n, p)$. 
 
-> A new medical drug has a $p=0.02$ chance of causing side effects in a patient. Using both the Binomial and Poisson distributions, find the probability that exactly 3 patients who took the drug suffer side effects, when the sample sizes are 10, 100, 1000 and 10000 respectively.
+> Example: A new medical drug has a $p=0.02$ chance of causing side effects in a patient. Modelling the experiment with both the Binomial and Poisson distributions, find the probability that exactly 3 patients who took the drug suffer side effects, when the sample sizes are 10, 100, 1000, 10000 and 100000 respectively.
 
 Test table: 
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-</style>
-<table class="tg"><thead>
-  <tr>
-    <th class="tg-0pky">$n$</th>
-    <th class="tg-0pky">$X=1$</th>
-    <th class="tg-0pky"></th>
-    <th class="tg-0pky">$X=3$</th>
-    <th class="tg-0pky"></th>
-    <th class="tg-0pky">$X=5$</th>
-    <th class="tg-0pky"></th>
-  </tr></thead>
-<tbody>
-  <tr>
-    <td class="tg-0pky">10</td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-  </tr>
-  <tr>
-    <td class="tg-0pky">100</td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-  </tr>
-  <tr>
-    <td class="tg-0pky">1000</td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-  </tr>
-  <tr>
-    <td class="tg-0pky">10000</td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-    <td class="tg-0pky"></td>
-  </tr>
-</tbody></table>
+<div w3-include-html = "/media/stat-distri/table1.html"></div>
