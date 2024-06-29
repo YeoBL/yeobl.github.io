@@ -2,7 +2,7 @@
 tags: statistics
 ---
 
-## Cool Statistical Distribution Models  
+## Cool Statistical Distributions  
 
 ### Poisson's Distribution
 
@@ -79,3 +79,18 @@ P(X = r) &= \binom{n}{r}\cdotp^r(1-p)^{n-r} \\
 &\approx e^{-\lambda}\cdot\frac{\lambda^r}{r!}
 \end{align*}
 $$
+
+#### Testing It Out  
+
+To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it against the Binomial Distribution $B(n, p)$. 
+
+> A new medical drug has a $p=0.02$ chance of causing side effects in a patient. Using both the Binomial and Poisson distributions, find the probability that exactly 3 patients who took the drug suffer side effects, when the sample sizes are 10, 100, 1000 and 10000 respectively.
+
+Test table: 
+| Cell1| Cell2 | Cell3 |
+|------|-------|-------|
+| merge right ||       |
+| merge|       |       |
+| below|^      |^      |
+| merge both  || value1|
+|^            || value2|
