@@ -87,8 +87,7 @@ To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it ag
 > A new medical drug has a $p=0.02$ chance of causing side effects in a patient. Using both the Binomial and Poisson distributions, find the probability that exactly 3 patients who took the drug suffer side effects, when the sample sizes are 10, 100, 1000 and 10000 respectively.
 
 Test table: 
-| Cell1| Cell2 | Cell3 |
-|------|-------|-------|
-| merge right ||       |
-| merge|       |       |
-| below|^      |^      |
+Attempt | #1 | #2 | #3 | #4 | #5 | #6 | #7 | #8 | #9 | #10 | #11
+--- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
+Seconds | 301 | 283 | 290 | 286 | 289 | 285 | 287 | 287 | 272 | 276 | 269
+
