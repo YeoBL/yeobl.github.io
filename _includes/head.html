@@ -27,6 +27,7 @@
     var images = ['bg0.jpeg', 'bg1.jpeg', 'bg2.jpeg', 'bg3.jpeg', 'bg4.jpeg', 'bg5.jpeg'];
     let image = images[Math.floor(Math.random() * images.length)];
     var setbg = function(){document.body.style.backgroundImage = "linear-gradient(rgba(103, 8, 239,0.7), rgba(54, 8, 159,0.7)), url(\'/media/global/" + image + "\')";}
+    document.addEventListener("DOMContentLoaded", setbg);
   </script>
   <style>
     body {
