@@ -88,4 +88,4 @@ To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it ag
 
 Test table: 
 
-<div w3-include-html = "/media/stat-distri/table1.html"></div>
+<div w3-include-html="/media/stat-distri/table1.html"></div>
