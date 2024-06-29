@@ -86,6 +86,15 @@ To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it ag
 
 > Example: A new medical drug has a $p=0.02$ chance of causing side effects in a patient. Modelling the experiment with both the Binomial and Poisson distributions, find the probability that exactly 3 patients who took the drug suffer side effects, when the sample sizes are 10, 100, 1000, 10000 and 100000 respectively.
 
-Test table: 
-
-<div w3-include-html="/media/stat-distri/table1.html"></div>
+$$
+\begin{table}[]
+\begin{tabular}{lllll}
+n        & lambda & 13 & 14 & 15 \\
+X=10     &        &    &    &    \\
+X=100    &        &    &    &    \\
+X=1000   &        &    &    &    \\
+X=10000  &        &    &    &    \\
+X=100000 &        &    &    &   
+\end{tabular}
+\end{table}
+$$
