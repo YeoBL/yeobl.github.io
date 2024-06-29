@@ -38,7 +38,7 @@ Then we can apply the formula $P(X = r) = e^{-\lambda}\cdot\frac{\lambda^{r}}{r!
 We start off with the binomial distribution  
 
 $$
-(p + q)^n = q^n + {n}p q^{n - 1} + \frac{n(n - 1)}{2!} + \dots + \frac{n(n - 1)\dots(n - r + 1)}{r!}p^r q^{n-r} + \dots + p^n
+(p + q)^n = q^n + {n}p q^{n - 1} + \frac{n(n - 1)}{2!}p^2 q^{n - 2} + \dots + \frac{n(n - 1)\dots(n - r + 1)}{r!}p^r q^{n-r} + \dots + p^n
 $$
 
 Using condition $(1)$ that $n$ is large, we can approximate the terms $n, (n-1), (n-2),\dots,(n-r)$ to be $n$ as $n\rightarrow\infty$. Doing so, we obtain  
