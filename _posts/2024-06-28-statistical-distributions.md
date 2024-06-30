@@ -4,7 +4,7 @@ tags: statistics
 
 ## Cool Statistical Distributions  
 
-### Poisson's Distribution
+### Poisson Distribution
 
 #### Motivation
 Say we have a radioactive decaying sample with some large number ($n = 5 \cdot10^{22}$) of particles. Each individual particle has an extremely small probability ($p = 4 \cdot 10^{-22}$) of decaying in the next $30$ minutes. Assuming the decay of particles are independent from each other, find the probability exactly $15$ particles have decayed after $30$ minutes.
@@ -22,7 +22,7 @@ $$
 P(X = 15) = \binom{5\cdot10^{22}}{15}\cdot(4 \cdot 10^{-22})^{15}\cdot(1-4 \cdot 10^{-22})^{5\cdot10^{22}-15}
 $$
 
-Obviously, this is extremely expensive to calculate, considering the large magnitude of $5\;\cdot\;10^{22}\choose15$ and the high precision required to find $(1-4 \cdot 10^{-22})^{5\cdot10^{22}-15}$. Our regular scientific/graphing calculators would overflow for the first value, and output 1 (which is far off) for the second value.
+Obviously, this is extremely computationally expensive to calculate, considering the large magnitude of $5\;\cdot\;10^{22}\choose15$ and the high precision required to find $(1-4 \cdot 10^{-22})^{5\cdot10^{22}-15}$. Our regular scientific/graphing calculators would overflow for the first value, and output 1 (which is far off) for the second value.
 
 #### Introducing Poisson's Distribution
 
@@ -33,7 +33,8 @@ For some binomial distribution $X\sim{B(n, p)}$, we let $np = \lambda$. If the f
 
 Then we can apply the formula $P(X = r) = e^{-\lambda}\cdot\frac{\lambda^{r}}{r!}$
 
-#### Derivation 
+<details>
+<summary> **Derivation** </summary>
 
 We start off with the binomial distribution  
 
@@ -79,22 +80,54 @@ P(X = r) &= \binom{n}{r}\cdot{p}^r(1-p)^{n-r} \\
 &\approx e^{-\lambda}\cdot\frac{\lambda^r}{r!}
 \end{align*}
 $$
+</details>
+
 
 #### Testing It Out  
 
 To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it against the Binomial Distribution $B(n, p)$. 
 
-> Example: A new medical drug has a $p=0.02$ chance of causing side effects in a patient. Modelling the experiment with both the Binomial and Poisson distributions, find the probability that exactly 3 patients who took the drug suffer side effects, when the sample sizes are 10, 100, 1000, 10000 and 100000 respectively.
+> Example: A hospital is testing out a few medical drugs, each with varying probabilities of side effects. The number of testers for each drug also varies, such that in each test, the expected number of testers suffering side effects is the same $(np=5)$. Find the probability that less than $3$ testers suffer side effects, when the sample sizes are $10, 20, 50, 100$ and $1000$ respectively. 
+
+###### Note: I'm using MathJax arrays to make a table here and I have no idea how to center the X\dots$ in the first row  
 
 $$
-\begin{table}[]
-\begin{tabular}{lllll}
-n        & lambda & 13 & 14 & 15 \\
-X=10     &        &    &    &    \\
-X=100    &        &    &    &    \\
-X=1000   &        &    &    &    \\
-X=10000  &        &    &    &    \\
-X=100000 &        &    &    &   
-\end{tabular}
-\end{table}
+\begin{array} {|c|c|cc|cc|cc|cc|}\hline n & p & X=0 & & X=1 &  & X=2 &  & X\lt3 &  \\ \hline  &  & P & B & P & B & P & B & P & B \\ \hline 10 & 0.500 & 0.007 & 0.001 & 0.034 & 0.010 & 0.084 & 0.044 & 0.125 & 0.055 \\ \hline 20 & 0.250 & 0.007 & 0.003 & 0.034 & 0.021 & 0.084 & 0.067 & 0.125 & 0.091 \\ \hline 50 & 0.100 & 0.007 & 0.005 & 0.034 & 0.029 & 0.084 & 0.078 & 0.125 & 0.112 \\ \hline 100 & 0.050 & 0.007 & 0.006 & 0.034 & 0.031 & 0.084 & 0.081 & 0.125 & 0.118 \\ \hline 1000 & 0.005 & 0.007 & 0.007 & 0.034 & 0.033 & 0.084 & 0.084 & 0.125 & 0.124 \\ \hline  \end{array}
 $$
+
+From the above table, we notice that as $n$ increases and $p$ decreases, the Poisson Distribution gives an increasingly acurate estimate of the Binomial Distribution. At $n = 1000$ and $p = 0.005$, the probabilities of the Poisson Distribution are almost identical to that of the Binomial's.  
+
+#### Properties of the Poisson Distribution  
+
+##### Recurrence Relation:
+
+$$
+P(X = r) = \frac{\lambda}{r} \cdot P(X = r - 1) 
+$$  
+
+By comparing the ratios of $\frac{P(X=r)}{P(X=r-1)}$, we note that for $r \lt \lambda$, $P(X = r)$ is increasing (since $\frac{\lambda}{r} \gt 1$) and for $r \gt \lambda$, $P(X = r)$ is decreasing (since $\frac{\lambda}{r} \lt1$). We can use this to find the mode of the distribution, which occurs when $r$ is equal to the integer part of $\lambda$ (i.e. $\lfloor{\lambda}\rfloor$). Proof: do some casework for both $r \gt \lambda$ and $r \lt \lambda$.
+
+Special case: if $\lambda \in \mathbb{R}$, then it is possible that $\lambda=r$. In this case, the distribution will have $2$ modes, $\lambda$ and $\lambda + 1$.  
+
+##### Expected Value and Variance:  
+
+In the binomial distribution, we have:
+
+$$
+E[X] = np \\
+Var(X) = np(1 - p) \\
+$$  
+
+For the Poisson Distribution, as $p\rightarrow0$, we can take $1-p\approx1$. Hence, we have the following:
+
+$$
+E[X] = np \\
+Var(X) = np \\
+$$
+
+##### Conditions:  
+
+1. **Independence:** Similar to the binomial distribution, the events in the Poisson Distribution must be independent of each other
+2. **Constant mean:** $\lambda$ cannot have any variation
+3. **Discrete values:** The distribution is only defined at non-negative integer values of occurences (e.g. concentration of saltwater)
+4. **Bernoulli representation:** In each subinterval, each event can only happen at most once (i.e. it can be represented as many Benoulli trials)
