@@ -34,7 +34,7 @@ For some binomial distribution $X\sim{B(n, p)}$, we let $np = \lambda$. If the f
 Then we can apply the formula $P(X = r) = e^{-\lambda}\cdot\frac{\lambda^{r}}{r!}$
 
 <details>
-<summary> **Derivation** </summary>
+<summary> Derivation </summary>
 
 We start off with the binomial distribution  
 
@@ -114,15 +114,19 @@ Special case: if $\lambda \in \mathbb{R}$, then it is possible that $\lambda=r$.
 In the binomial distribution, we have:
 
 $$
+\begin{gather*}
 E[X] = np \\
 Var(X) = np(1 - p) \\
+\end{gather*}
 $$  
 
 For the Poisson Distribution, as $p\rightarrow0$, we can take $1-p\approx1$. Hence, we have the following:
 
 $$
+\begin{gather*}
 E[X] = np \\
 Var(X) = np \\
+\end{gather*}
 $$
 
 ##### Conditions:  
