@@ -135,3 +135,53 @@ $$
 2. **Constant mean:** $\lambda$ cannot have any variation
 3. **Discrete values:** The distribution is only defined at non-negative integer values of occurences (e.g. concentration of saltwater)
 4. **Bernoulli representation:** In each subinterval, each event can only happen at most once (i.e. it can be represented as many Benoulli trials)
+
+### Chi-Squared $(\chi^2)$ Distribution  
+
+#### Motivation  
+Suppose we are in a casino and we want to determine if a roulette wheel is truly fair (i.e. equiprobability of all numbers). Obviously, the casino wouldn't let us inspect the roulette wheel. The best we could do would be to observe the wheel alot of times, then tabulate our results. If we observe the wheel 700 times, our table would look something like this
+
+##### For simplicity, let's just assume the wheel only has the numbers 0 - 6 so the table isn't ridiculously big. 
+
+$$
+\begin{array} {|c|c|c|c|c|c|c|c|}
+\hline Value & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\ 
+\hline Observed & 95 & 103 & 99 & 110 & 90 & 95 & 108 \\ 
+\hline Expected & 100 & 100 & 100 & 100 & 100 & 100 & 100\\
+\hline 
+ \end{array}
+$$
+
+Due to the randomness of the wheel, we will almost always see some variation between the Observed and Expected values of each number appearing. This leaves us with the difficulty of figuring out whether the wheel is biased or not. How do we quantitavely determine if 3 appeared more frequently by chance or because the wheel is unfair?
+
+#### Introducing the Chi-Squared $(\chi^2)$ distribution
+
+*Definition:* A Chi-Squared distribution with k-degrees of freedom is the distribution of a variable that is the sum of squares of k independent standard normal distributions $Z\sim{N}(0,1)$. Formally, the Chi-Squared distribution is defined as 
+
+$$  
+\sum\limits_{i=1}^{k}Z_i^2 \sim \chi^2(k)
+$$  
+
+##### Note: we denote the Chi-Squared distribution with $\chi^2(k)$.  
+
+Here, "degrees of freedom" corresponds with the number of independent standard normal distributions. When we are conducting hypothesis testing later it will be used to refer to the number of variables that we can choose without any constraints.
+
+We can try to imagine how $\Chi^2(1)$ looks like based on the normal distribution. For $k\geq2$, I found it difficult to visualise, perhaps there are geniuses able to, but [here](https://en.wikipedia.org/wiki/File:Chi-square_pdf.svg)'s the probability density function and [here](https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Chi-square_cdf.svg/482px-Chi-square_cdf.svg.png)'s the cumulative density function.
+
+#### Hypothesis testing
+
+To quantitatively determine the randomness, we follow this procedure  
+1. Form the null and alternative hypotheses
+2. Tabulate the expected and observed frequencies
+3. Check if any of the columns have expected frequencies $<5$ or observed frequencies $<1$. Combine these columns together to reduce the error of margin for the testing.
+4. Calculate $X^2=\sum_{i=1}^{N} \frac{(E_i-O_i)^2}{E_i^2}$
+5. Calculate the number of degrees of freedom with $k =$ number of values $-$ number of constraints $- 1$. We always $-1$ beacuse the total sum is fixed, which is in itself a constraint.
+6. Choose either step 7 or 8
+7. Use either G.C. or MF26 to find the critical value of our Chi-Squared distribution. If it exceeds our value of $X^2$, we reject the null hypothesis in favour of the alternative hypothesis. Otherwise, we do not reject the null hypothesis.
+8. Use G.C. to calculate the p-value of our calculated $X^2$. If it is lower than our Level of Significance (LoS), we reject we reject the null hypothesis in favour of the alternative hypothesis. Otherwise, we do not reject the null hypothesis.
+
+#### Example
+
+TBC
+
+We can also use the p-value for other distributions, such as the Poisson, Binomial and Negative Binomial Distribution. Below are more examples.
