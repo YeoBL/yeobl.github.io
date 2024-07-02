@@ -166,7 +166,7 @@ $$
 
 Here, "degrees of freedom" corresponds with the number of independent standard normal distributions. When we are conducting hypothesis testing later it will be used to refer to the number of variables that we can choose without any constraints.
 
-We can try to imagine how $\Chi^2(1)$ looks like based on the normal distribution. For $k\geq2$, I found it difficult to visualise, perhaps there are geniuses able to, but [here](https://en.wikipedia.org/wiki/File:Chi-square_pdf.svg)'s the probability density function and [here](https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Chi-square_cdf.svg/482px-Chi-square_cdf.svg.png)'s the cumulative density function.
+We can try to imagine how $\chi^2(1)$ looks like based on the normal distribution. For $k\geq2$, I found it difficult to visualise, perhaps there are geniuses able to, but [here](https://en.wikipedia.org/wiki/File:Chi-square_pdf.svg)'s the probability density function and [here](https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Chi-square_cdf.svg/482px-Chi-square_cdf.svg.png)'s the cumulative density function.
 
 #### Hypothesis testing
 
