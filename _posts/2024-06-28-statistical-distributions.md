@@ -174,7 +174,7 @@ To quantitatively determine the randomness, we follow this procedure
 1. Form the null and alternative hypotheses
 2. Tabulate the expected and observed frequencies
 3. Check if any of the columns have expected frequencies $<5$ or observed frequencies $<1$. Combine these columns together to reduce the error of margin for the testing.
-4. Calculate $X^2=\sum_{i=1}^{N} \frac{(E_i-O_i)^2}{E_i^2}$
+4. Calculate $X^2=\sum_{i=1}^{N} \frac{(E_i-O_i)^2}{E_i}$
 5. Calculate the number of degrees of freedom with $k =$ number of values $-$ number of constraints $- 1$. We always $-1$ beacuse the total sum is fixed, which is in itself a constraint.
 6. Choose either step 7 or 8
 7. Use either G.C. or MF26 to find the critical value of our Chi-Squared distribution. If it exceeds our value of $X^2$, we reject the null hypothesis in favour of the alternative hypothesis. Otherwise, we do not reject the null hypothesis.
