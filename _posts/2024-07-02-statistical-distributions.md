@@ -7,7 +7,7 @@ tags: statistics
 ### Poisson Distribution
 
 #### Motivation
-Say we have a radioactive decaying sample with some large number ($n = 5 \cdot10^{22}$) of particles. Each individual particle has an extremely small probability ($p = 4 \cdot 10^{-22}$) of decaying in the next $30$ minutes. Assuming the decay of particles are independent from each other, find the probability exactly $15$ particles have decayed after $30$ minutes.
+Suppose we have a radioactive decaying sample with some large number ($n = 5 \cdot10^{22}$) of particles. Each individual particle has an extremely small probability ($p = 4 \cdot 10^{-22}$) of decaying in the next $30$ minutes. Assuming the decay of particles are independent from each other, find the probability exactly $15$ particles have decayed after $30$ minutes.
 
 ##### Using The Binomial Distribution
 Recalling the formula for the binomial distribution, we know that the probability of $X = r$ for a set of $n$ Bernoulli trials is given by 
@@ -82,6 +82,7 @@ P(X = r) &= \binom{n}{r}\cdot{p}^r(1-p)^{n-r} \\
 $$
 </details>
 
+<br/>
 
 #### Testing It Out  
 
@@ -152,7 +153,7 @@ $$
  \end{array}
 $$
 
-Due to the randomness of the wheel, we will almost always see some variation between the Observed and Expected values of each number appearing. This leaves us with the difficulty of figuring out whether the wheel is biased or not. How do we quantitavely determine if 3 appeared more frequently by chance or because the wheel is unfair?
+Due to the randomness of the wheel, we will almost always see some variation between the Observed and Expected values of each number appearing. This leaves us with the difficulty of figuring out whether the wheel is biased or not. How do we quantitatively test the hypothesis that the wheel is fair?
 
 #### Introducing the Chi-Squared $(\chi^2)$ distribution
 
@@ -173,15 +174,62 @@ We can try to imagine how $\chi^2(1)$ looks like based on the normal distributio
 To quantitatively determine the randomness, we follow this procedure  
 1. Form the null and alternative hypotheses
 2. Tabulate the expected and observed frequencies
-3. Check if any of the columns have expected frequencies $<5$ or observed frequencies $<1$. Combine these columns together to reduce the error of margin for the testing.
+3. Check if any of the cells have expected values $<5$ or observed values $<1$. Combine these cellstogether to reduce the error of margin for the testing.
 4. Calculate $X^2=\sum_{i=1}^{N} \frac{(E_i-O_i)^2}{E_i}$
 5. Calculate the number of degrees of freedom with $k =$ number of values $-$ number of constraints $- 1$. We always $-1$ beacuse the total sum is fixed, which is in itself a constraint.
 6. Choose either step 7 or 8
 7. Use either G.C. or MF26 to find the critical value of our Chi-Squared distribution. If it exceeds our value of $X^2$, we reject the null hypothesis in favour of the alternative hypothesis. Otherwise, we do not reject the null hypothesis.
-8. Use G.C. to calculate the p-value of our calculated $X^2$. If it is lower than our Level of Significance (LoS), we reject we reject the null hypothesis in favour of the alternative hypothesis. Otherwise, we do not reject the null hypothesis.
+8. Use G.C. to calculate the p-value of our calculated $X^2$. If it is greater than our Level of Significance (LoS), we reject we reject the null hypothesis in favour of the alternative hypothesis. Otherwise, we do not reject the null hypothesis.
 
-#### Example
+#### Worked Example (Roulette Wheel)
 
-TBC
+1. To test the hypothesis that the roulette wheel is fair, we need an alternative hypothesis, which will be that the roulette wheel is not fair
+2. We observe the wheel 700 times, and tabulate our observations 
+$$
+\begin{array} {|c|c|c|c|c|c|c|c|}
+\hline Value & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\ 
+\hline Observed & 95 & 103 & 99 & 110 & 90 & 95 & 108 \\ 
+\hline Expected & 100 & 100 & 100 & 100 & 100 & 100 & 100\\
+\hline 
+ \end{array}
+$$
 
-We can also use the p-value for other distributions, such as the Poisson, Binomial and Negative Binomial Distribution. Below are more examples.
+3. All cells have expected values $\geq5$ and observed values $\geq1$, so there is no need to perform merging here
+
+4. We calculate $X^2$ to use for testing later on
+
+$$
+\begin{align*}
+X^2 &= \sum\limits_{i=0}^{6}\frac{(O_i-E_i)^2}{E_i} \\
+&= \frac{(95-100)^2+(103-100)^2+\dots+(108-100)^2}{100} \\
+&= 3.24
+\end{align*}
+$$
+
+5. Apart from the total sum adding up to 700, we have 0 other constraints on the observed value. Hence, we take the number of degrees of freedom , $v=7-0-1=6$
+
+6. For demonstration purposes, we will use both steps 7 and 8. In actual testing, only one is needed. Our level of significance will be $LoS=0.05$
+
+7. Referring to page 9 of MF26, when $v=5$ and $p=1-0.05=0.95$, our critical value $\chi^2_5(0.05)=11.07$. Since our $X^2$ value is under the critical value, it is not statistically signficiant and we do not reject the null hypothesis in favour of the alternative hypothesis
+
+##### Note: $\chi^2_v(k)$ refers to the critical value for the Chi-Squared distribution with $v$ degrees of freedom at Level of Significance $k$
+
+8. Using G.C. to calculate our p-value, we get $P(X^2\gt3.24)=0.337$. Since $0.337>0.05$, this result is not statistically significant and we do not reject the null hypothesis in favour of the alternative hyothesis.
+
+We can also use the p-value for other distributions, such as the Poisson, Binomial and Negative Binomial Distribution. Below are more examples (To be added).
+
+<details>
+<summary>Poisson Distribution</summary>
+</details>
+
+<br/>
+
+<details>
+<summary>Binomial Distribution</summary>
+</details>
+
+<br/>
+
+<details>
+<summary>Negative Binomial Distribution</summary>
+</details>
