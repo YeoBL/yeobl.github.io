@@ -90,7 +90,7 @@ To evaluate the accuracy of the Poisson Distribution $P(n, p)$, we compare it ag
 
 > Example: A hospital is testing out a few medical drugs, each with varying probabilities of side effects. The number of testers for each drug also varies, such that in each test, the expected number of testers suffering side effects is the same $(np=5)$. Find the probability that less than $3$ testers suffer side effects, when the sample sizes are $10, 20, 50, 100$ and $1000$ respectively. 
 
-###### Note: I'm using MathJax arrays to make a table here and I have no idea how to center the X\dots$ in the first row  
+###### Note: I'm using MathJax arrays to make a table here and I have no idea how to center the $X\dots$ in the first row  
 
 $$
 \begin{array} {|c|c|cc|cc|cc|cc|}\hline n & p & X=0 & & X=1 &  & X=2 &  & X\lt3 &  \\ \hline  &  & P & B & P & B & P & B & P & B \\ \hline 10 & 0.500 & 0.007 & 0.001 & 0.034 & 0.010 & 0.084 & 0.044 & 0.125 & 0.055 \\ \hline 20 & 0.250 & 0.007 & 0.003 & 0.034 & 0.021 & 0.084 & 0.067 & 0.125 & 0.091 \\ \hline 50 & 0.100 & 0.007 & 0.005 & 0.034 & 0.029 & 0.084 & 0.078 & 0.125 & 0.112 \\ \hline 100 & 0.050 & 0.007 & 0.006 & 0.034 & 0.031 & 0.084 & 0.081 & 0.125 & 0.118 \\ \hline 1000 & 0.005 & 0.007 & 0.007 & 0.034 & 0.033 & 0.084 & 0.084 & 0.125 & 0.124 \\ \hline  \end{array}
@@ -198,13 +198,13 @@ $$
 
 4. We calculate $X^2$ to use for testing later on
 
-$$
-\begin{align*}
-X^2 &= \sum\limits_{i=0}^{6}\frac{(O_i-E_i)^2}{E_i} \\
-&= \frac{(95-100)^2+(103-100)^2+\dots+(108-100)^2}{100} \\
-&= 3.24
-\end{align*}
-$$
+    $$
+    \begin{align*}
+    X^2 &= \sum\limits_{i=0}^{6}\frac{(O_i-E_i)^2}{E_i} \\
+    &= \frac{(95-100)^2+(103-100)^2+\dots+(108-100)^2}{100} \\
+    &= 3.24
+    \end{align*}
+    $$
 
 5. Apart from the total sum adding up to 700, we have 0 other constraints on the observed value. Hence, we take the number of degrees of freedom , $v=7-0-1=6$
 
@@ -212,7 +212,7 @@ $$
 
 7. Referring to page 9 of MF26, when $v=5$ and $p=1-0.05=0.95$, our critical value $\chi^2_5(0.05)=11.07$. Since our $X^2$ value is under the critical value, it is not statistically signficiant and we do not reject the null hypothesis in favour of the alternative hypothesis
 
-##### Note: $\chi^2_v(k)$ refers to the critical value for the Chi-Squared distribution with $v$ degrees of freedom at Level of Significance $k$
+    ##### Note: $\chi^2_v(k)$ refers to the critical value for the Chi-Squared distribution with $v$ degrees of freedom at Level of Significance $k$
 
 8. Using G.C. to calculate our p-value, we get $P(X^2\gt3.24)=0.337$. Since $0.337>0.05$, this result is not statistically significant and we do not reject the null hypothesis in favour of the alternative hyothesis.
 
