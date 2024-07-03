@@ -212,7 +212,7 @@ $$
 
 7. Referring to page 9 of MF26, when $v=5$ and $p=1-0.05=0.95$, our critical value $\chi^2_5(0.05)=11.07$. Since our $X^2$ value is under the critical value, it is not statistically signficiant and we do not reject the null hypothesis in favour of the alternative hypothesis
 
-    ##### Note: $\chi^2_v(k)$ refers to the critical value for the Chi-Squared distribution with $v$ degrees of freedom at Level of Significance $k$
+    <h5> Note: $\chi^2_v(k)$ refers to the critical value for the Chi-Squared distribution with $v$ degrees of freedom at Level of Significance $k$ </h5>
 
 8. Using G.C. to calculate our p-value, we get $P(X^2\gt3.24)=0.337$. Since $0.337>0.05$, this result is not statistically significant and we do not reject the null hypothesis in favour of the alternative hyothesis.
 
