@@ -72,7 +72,7 @@ The payoff for both players sticking to the strategy in discounted utility terms
 
 $$
 \begin{align*}
-4 + 4\beta + 4\beta^2 + \ldots &= 4\cdot\sum\limits_{i=0}^{\infin}\beta^i \\
+4 + 4\beta + 4\beta^2 + \ldots &= 4\cdot\sum\limits_{i=0}^{\infty}\beta^i \\
 &= \frac{4}{1-\beta}\\
 \end{align*}
 $$  
@@ -86,7 +86,7 @@ The payoff for the player who deviated in discounted utility terms would be
 
 $$
 \begin{align*}
-5 + \beta + \beta^2 + \beta^3 + \ldots &= 5 + \sum\limits_{i=1}^{\infin}\beta^i \\
+5 + \beta + \beta^2 + \beta^3 + \ldots &= 5 + \sum\limits_{i=1}^{\infty}\beta^i \\
 &= 5 + \frac{\beta}{1-\beta}\\
 \end{align*}
 $$  
@@ -107,4 +107,25 @@ That's it, we've shown that both players playing the grim trigger strategy is fe
 
 Finite games on the other hand, are games where there is a fixed end, and always ends in a finite number of moves. Most real life repeated games tend to be finite. For instance, in the area cleaning game, at some (known) point, everyone moves out and the game ends.  
 
-Intuitively, we would expect that for some sufficiently large $\beta$, the grim trigger strategy is feasible for both players. 
+Intuitively, we would expect that for some sufficiently large $\beta$, the grim trigger strategy is feasible for both players. But here's the difference: there is now a **last turn**, and both players are aware of when that would be.  
+
+Let's focus on the last round, which in the area cleaning game would be the last book out. On that day, no rational individual would have the incentive to play the globally optimal move, $D$, since there are no more future games to be considered. To each individual, playing $S$ is the best response regardless of what moves the other players choose.  
+
+Now consider the second last round. Assuming every rational player is a perfectly rational logician, they would all be well aware that the other players would play $S$ regardless of what happens in this round. Thus, there is no incentive to play $D$ since it wouldn't affect the future rounds yet gives a lower payoff in the current round.  
+
+You can see where this is going: on the third last round the same logic applies, on the fourth last round too, and so on. Hence, on the first round, theoreticaly all rational players should just choose $S$, regardless of their discount factor $\beta$.  
+
+<details>
+<summary> Formally, the proof looks like this  </summary>
+
+Let $P(X)$ be the proposition that on the $X$-th last round, all rational players would play $S$
+
+In the last round, there are no future rounds to consider. Hence, each player only considers the payoff they receive in the current round. Regardless of what the other players play, the best response is always $S$. Hence, all the players play $S$ in the last round, and $P(1)$ holds.
+
+We claim that $\forall k \in \mathbb{Z}^+, \; \bigwedge_{i=1}^{k-1}P(i)\implies{P(k)}$.
+
+On the $k$-th last round, each rational player knows that their current move does not have any bearing on the other players' future moves (since $P(1), P(2), \ldots, P(k - 1)$ all hold). Each player would thus only consider the payoff in the current round and play $S$ since it gives a higher payoff regardless of their opponents' choices.  
+
+Since $P(1)$ holds and $\forall k \in \mathbb{Z}^+, \; \bigwedge_{i=1}^{k-1}P(i)\implies{P(k)}$, we have shown that $P(n)$ holds for any positive integer $n$. 
+
+</details>  
