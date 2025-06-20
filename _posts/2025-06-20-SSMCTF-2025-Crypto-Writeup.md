@@ -59,7 +59,7 @@ ChatGPT conveniently gives us this explanation:
 > \text{leak} = (1 \cdot 1 \cdot 1) + (0 \cdot 1 \cdot 1) = 1.
 > $$
 
-We check if leak is indeed by verifying that $p|n$. 
+We check if leak is indeed $1$ by verifying that $p {\mid} n $:
 
 ```python
 n = 1432796777893351...
@@ -72,7 +72,7 @@ print(n % p == 0)
 # Outputs True
 ```
 
-There we have it, since we know that $n = p\cdot{q}$ now we can easily compute 
+There we have it, we can easily find $q = \frac{n}{p}$ and we know that $n = p\cdot{q}$ now we can easily compute 
 $$\phi(n)=(p-1)\cdot(q-1)$$
 
 We have $ct = pt^{65537}\space(mod{\space}n)$, so all we need to do is find $x$ such that 
