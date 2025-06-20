@@ -21,7 +21,7 @@ This was my second time playing a CTF after studying the various Crypto techniqu
 ### Tariff Evaluation
 
 #### Factorizing n
-We are provided with what looks like a simple RSA encryption [chall.py](/media/SSMTF25/chall1.py).
+We are provided with what looks like a simple RSA encryption [chall.py](/media/SSMCTF25/chall1.py).
 
 Interestingly, we are given $n$ and $p - leak$. My first thought was to just run the code and find $leak$, use it to find $p$ which would solve the factorization problem.
 
