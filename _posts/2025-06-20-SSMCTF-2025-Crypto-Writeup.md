@@ -9,7 +9,7 @@ tags: Crypto
 This was my second time playing a CTF after studying the various Crypto techniques. The first was CDDC but regrettably, they didn't have much Crypto other than a relatively simple ECDSA chall entitled _Timeless MDS_. Overall, the crypto challs in this CTF were fairly interesting, and generally enjoyeable to work on. There were a total of 10 challenges, below are my ratings for each one:
 
 1. [Tariff evaluation (68 solves)](#tariff-evaluation): 4/10
-2. [Cauldron (26 solves)](#cauldron): 6/10
+2. [Cauldron (26 solves)](#cauldron): 5/10
 3. [BB84 2 (22 solves)](#bb84-2): 2/10
 4. [Security Update (18 Solves)](#security-update): 7/10
 5. Triple Baka (9 solves): 6/10
@@ -27,7 +27,7 @@ We are provided with what looks like a simple RSA encryption [chall.py](/media/S
 
 Interestingly, we are given $n$ and $p - leak$. My first thought was to just run the code and find $leak$, use it to find $p$ which would solve the factorization problem.
 
-Unfortunately, running it seems to take forever, and the line that calculates $leak$ is simply too caonvoluted for us to figure out what's going on.  
+Unfortunately, running it seems to take forever, and the line that calculates $leak$ is simply too convoluted for us to figure out what's going on.  
 
 #### Factorizing $n$
 
@@ -172,7 +172,7 @@ I initially guessed the following
 
 - $B$: conversion to base64
 - $R$: reversing the string
-- $S$: swap adjacent characters e.g. `123456` $\rightarrow$ `214365`
+- $S$: swap adjacent characters e.g. `"123456"` $\rightarrow$ `"214365"`
 - $X$: convert all characters to their ordering with `ord`, then concatenate with `','`
 
 My guesses for $B$, $R$ and $S$ turned out to be correct, but $X$ was unfortunately wrong.
@@ -236,7 +236,6 @@ We can find out what exactly $X$ does by noticing a pattern of the mappings ("D"
 The rest is trivial, we simply implement the functions' inverse and apply them in the reverse order on the text in [output.txt](/media/SSMCTF/output_chall2.txt)'s line 217 to retrieve our flag.
 
 My [solve script](/media/SSMCTF25/solve2.py)
-</details>
 
 ### BB84 2
 
@@ -246,9 +245,9 @@ We are given this really large 3D-nested list in [convos.py](/media/SSMCTF25/con
 
 #### Solving the challenge
 
-This challenge wasn't interesting, hence, as you might've observed, I was not particularly zealous in describing my solution in a detailed manner. We first note that each 2D-nested list is of exactly size 4, with all 4 1D lists inside having the exact same length (but varying across different 2D lists).
+This challenge wasn't interesting, hence, as you might've noticed, I was not particularly zealous in describing my solution in a detailed manner. We first note that each 2D-nested list is of exactly size 4, with all 4 1D lists inside having the exact same length (but varying across different 2D-nested lists).
 
-I applied the BB84 protocool to each of these 2D lists, where you drop bits if different bases were used to measure them, and found that for each 2D list, we would have 2 bitarrays of length exactly 128 remaining.
+I applied the BB84 protocool to each of these 2D-nested lists, where you drop bits if different bases were used to measure them, and found that for each 2D-nested list, we would have 2 bitarrays of length exactly 128 remaining.
 
 I just brute forced the ciphertext by considering each 128 bit as a candidate key/iv value for the AES decryption, and filtered out those that had the flag wrapper, 'SSMCTF' in them.
 
@@ -267,7 +266,7 @@ N = p * q
 
 At the start, our flag is encrypted with the parameter `e=3`, and we are provided with the values of $N$ and $ct=flag^e\space(mod\space{N})$.
 
-We can try to solve a challenge where we can derive the original value of $m$, a 22-byte number, from $c=m^e\space(mod\space{N})$. If we succeed, the server will update its security by setting `e=65537`. 
+We can try to solve a challenge where we attempt to derive the original value of $m$, a 22-byte number, from $c=m^e\space(mod\space{N})$. If we succeed, the server will "update" its security by setting `e=65537`.
 
 ```python
 def update_security():
@@ -290,7 +289,7 @@ def get_challenge():
 
 #### Initial Attempt
 
-I originally tried to solve this problem with RSA's [small e attack](https://ir0nstone.gitbook.io/crypto/rsa/public-exponent-attacks/small-e), to directly recover $flag$ from $ct$. However, I suppose the value of $flag$ was too large so I couldn't get a result. [Here](/media/SSMCTF25/solve4_1.py)'s the code from that attempt.
+I originally tried to solve this problem with RSA's [small e attack](https://ir0nstone.gitbook.io/crypto/rsa/public-exponent-attacks/small-e), to directly recover $flag$ from $ct$. However, I suppose the value of $flag$ was too large so I couldn't get a result after waiting for a couple of minutes. [Here](/media/SSMCTF25/solve4_1.py)'s the code from that attempt.
 
 To use it, replace `N_challenge` and `c_challenge` with the values of $N$ and $ct$ respectively.
 
@@ -298,20 +297,22 @@ To use it, replace `N_challenge` and `c_challenge` with the values of $N$ and $c
 
 Even though the above attack was not successful at retrieving $flag$, we could still use it to break the challenge as $m$ is a 22-byte/176-bit number. $m^3$ would have no more than 528 bits, which is not a lot more than $N$'s 512 bits.
 
-Since $c=m^3\space(mod{\space}n)$, we can determine that $\sqrt[3]{c + kn}=m$, for some value of k. As $m^3$ has no more than 528 bits and $N$ has 512 bits, $k$ has at most 17 bits. If it did have more than 17 bits, then $kn$ would have more than 528 bits. This makes for a computationally feasible search space of at most $2^{17}=1.3e6$.
+Since $c=m^3\space(mod{\space}n)$, we can determine that $\sqrt[3]{c + kn}=m$, for some value of k. As $m^3$ has no more than 528 bits and $N$ has 512 bits, $k$ has at most 17 bits. If $k$ did have more than 17 bits, then $kn$ would have more than 528 bits. The limited range of $k$ makes for a computationally feasible search space of size $2^{17}=1.3e6$.
 
 #### Retrieving $flag$
 
 After cracking the challenge, we have 2 values of $ct$, encrypted with the same $N$. Let $ct_1=flag^{3}\space(mod{\space}n)$ and $ct_2=flag^{65537}\space(mod{\space}n)$. It is easily-verifiable that $gcd(3, 65537) = 1$, which we can abuse (I couldn't find a name for this attack).
 
-Since $gcd(3, 65537) = 1$, we can find some $(a, b)$ pair such that $3a + 65537b = 1$ using the **extended** euclidean algorithm. This works out to be `a=21846` and `b=-1`. We solve for $flag$ with the following:
+Since $gcd(3, 65537) = 1$, we can find some $(a, b)$ pair such that $3a + 65537b = 1$ using the **extended** euclidean algorithm. One such solution is `a=21846` and `b=-1`. We solve for $flag$ with the following:
 
 $$
 \begin{align*}
-ct_1^{21856} \cdot ct_2^{-1} &= {flag}^{3 \cdot 21856} \cdot {flag}^{65537 \cdot -1} \\
-        &= {flag}^{65538} \cdot {flag}^{-65537} \\
-        &= flag
+ct_1^{21856} \cdot ct_2^{-1} &= {flag}^{3 \cdot 21856} \cdot {flag}^{65537 \cdot -1}&&\space(mod\space{N}) \\
+        &= {flag}^{65538} \cdot {flag}^{-65537}&&\space(mod\space{N}) \\
+        &= flag&&\space(mod\space{N})
 \end{align*}
 $$
 
 [Here](/media/SSMCTF25/sol4_2.py) is my solve script, amend the values of $N$, $ct_1$ and $ct_2$ accordingly.
+
+##### Note: sometimes $ct_2$ might not have an inverse under modulo $N$, since $N$ is not prime, causing this solution to fail. In that case, not having an inverse implies that $ct_2$ is not coprime to $N$, and we can use $gcd(ct_2, N)$ to find $p$ and factorize $N$. This would be an even bigger break that allows us to decrypt all messages encrypted with $N$.
