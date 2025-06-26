@@ -429,8 +429,8 @@ This one's pretty straightforward, it's just tetration
 $$
 \mathrm{baka}(ba,\,ka)
 =
-  \underbrace{%
-    ba^{\,ba^{\,\cdots^{\,ba}}}%
+  \underbrace{
+    ba^{\,ba^{\,\cdots^{\,ba}}}
   }_{ka\text{ times}}
 $$
 
@@ -484,8 +484,8 @@ $triplebaka$, when expanded, looks something like this:
 $$
 \mathrm{triplebaka}
 =
-  \underbrace{%
-    3^{\,3^{\,\cdots^{\,3}}}%
+  \underbrace{
+    3^{\,3^{\,\cdots^{\,3}}}
   }_{\text{a lot of times}}
 $$
 
