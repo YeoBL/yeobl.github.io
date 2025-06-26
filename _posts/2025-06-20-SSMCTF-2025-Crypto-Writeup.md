@@ -12,16 +12,16 @@ This was my second time playing a CTF after studying the various Crypto techniqu
 2. [Cauldron (26 solves)](#cauldron): 5/10
 3. [BB84 2 (22 solves)](#bb84-2): 2/10
 4. [Security Update (18 Solves)](#security-update): 7/10
-5. Triple Baka (9 solves): 6/10
-6. ECSSP (9 solves): 8/10
-7. Ice Kachang (4 solves): 8/10
+5. [Triple Baka (9 solves)](#triple-baka): 8/10
+6. [ECSSP (9 solves)](#ecssp): 7/10
+7. Ice Kachang (4 solves): 7/10
 8. Milk (3 solves): 7/10
 9. STONKS (2 solves): 8/10
 10. Change (0 solves): Did Not Solve
 
 ### Tariff Evaluation
 
-#### Understanding the challenge
+#### Understanding The Challenge
 
 We are provided with what looks like a simple RSA encryption [chall.py](/media/SSMCTF25/chall1.py).
 
@@ -51,7 +51,7 @@ ChatGPT conveniently gives us this explanation:
 >
 > - **G**: the golden ratio factor  
 >  $$G = \phi^2 - \phi = 1,$$  
->  where \(\phi\) satisfies \(\phi^2 - \phi - 1 = 0\).
+>  where \($\phi$) satisfies \($phi^2 - \phi - 1 = 0$).
 >
 > Then the value of `leak` is given by:
 > $$
@@ -76,13 +76,12 @@ print(n % p == 0)
 # Outputs True
 ```
 
-There we have it, we can easily find $q = \frac{n}{p}$ and we know that $n = p\cdot{q}$ so we can easily compute 
+There we have it, we can easily find $q = \frac{n}{p}$ and we know that $n = p\cdot{q}$ so we can easily compute
 $$\phi(n)=(p-1)\cdot(q-1)$$
-
 
 #### Calculating $pt$
 
-We have $ct = pt^{65537}\space(mod{\space}n)$, so all we need to do is find $x$ such that 
+We have $ct = pt^{65537}\space(mod{\space}n)$, so all we need to do is find $x$ such that
 $$ct^{x}{\space\equiv\space}pt\space(mod{\space}n)$$
 $$pt^{65537\cdot{x}}{\space\equiv\space}pt{\space}(mod{\space}n)$$
 
@@ -119,7 +118,7 @@ print(pt_bytes)
 
 ### Cauldron
 
-#### Understanding the challenge
+#### Understanding The Challenge
 
 We are provided with 6 unknown functions, $C, B, R, S, X, O$ in [cauldron.py](/media/SSMCTF25/chall2.py).
 
@@ -143,7 +142,7 @@ for func in functions:
 output.write(flag)
 ```
 
-#### Initial guesses
+#### Initial Guesses
 
 To start, we first take a look at the lines which had the same function applied to `text` 3 times.
 
@@ -177,7 +176,7 @@ I initially guessed the following
 
 My guesses for $B$, $R$ and $S$ turned out to be correct, but $X$ was unfortunately wrong.
 
-#### Figuring out the other functions
+#### Figuring Out The Rest
 
 Since $R^2(text) = text$, we can use $RRC(text)=C(text)$, $RRX(text)=X(text)$ and $RRO(text)=O(text)$ to more easily deduce what the remaining functions are.
 
@@ -231,7 +230,7 @@ print(''.join(line90[i] for i in range(1, len(line90), 3)))
 
 We can find out what exactly $X$ does by noticing a pattern of the mappings ("D" $\rightarrow$ "CDE", "o" $\rightarrow$ "nop" and "u" $\rightarrow$ "tuv") but it is not necessary as we are only interested in finding its inverse to retrieve the flag.
 
-#### Solving the challenge
+#### Solving The Challenge
 
 The rest is trivial, we simply implement the functions' inverse and apply them in the reverse order on the text in [output.txt](/media/SSMCTF/output_chall2.txt)'s line 217 to retrieve our flag.
 
@@ -239,11 +238,11 @@ My [solve script](/media/SSMCTF25/solve2.py)
 
 ### BB84 2
 
-#### Understanding the challenge
+#### Understanding The Challenge
 
 We are given this really large 3D-nested list in [convos.py](/media/SSMCTF25/convos.py), and a ciphertext in [ct.txt](/media/SSMCTF25/ct.txt). We are also told that the ciphertext was encrypted with AES, with the key/iv being exchanged via BB84.
 
-#### Solving the challenge
+#### Solving The Challenge
 
 This challenge wasn't interesting, hence, as you might've noticed, I was not particularly zealous in describing my solution in a detailed manner. We first note that each 2D-nested list is of exactly size 4, with all 4 1D lists inside having the exact same length (but varying across different 2D-nested lists).
 
@@ -255,7 +254,7 @@ My [solve script](/media/SSMCTF25/solve3.py).
 
 ### Security Update
 
-#### Understanding the problem
+#### Understanding The Challenge
 
 We are given some RSA encryption server code in [chall.py](/media/SSMCTF25/chall4.py). $N$ is a 512-bit pseudoprime (i.e. it is obtained by multiplying 2 256-bit primes together). This makes a factorization attack on $N$ not feasible.
 
@@ -315,4 +314,245 @@ $$
 
 [Here](/media/SSMCTF25/sol4_2.py) is my solve script, amend the values of $N$, $ct_1$ and $ct_2$ accordingly.
 
-##### Note: sometimes $ct_2$ might not have an inverse under modulo $N$, since $N$ is not prime, causing this solution to fail. In that case, not having an inverse implies that $ct_2$ is not coprime to $N$, and we can use $gcd(ct_2, N)$ to find $p$ and factorize $N$. This would be an even bigger break that allows us to decrypt all messages encrypted with $N$.
+##### Note: sometimes $ct_2$ might not have an inverse under modulo $N$, since $N$ is not prime, causing this solution to fail. In that case, not having an inverse implies that $ct_2$ is not coprime to $N$, and we can use $gcd(ct_2, N)$ to find $p$ and factorize $N$. This would be an even bigger break that allows us to decrypt all messages encrypted with $N$
+
+### Triple Baka
+
+#### Understanding The Challenge
+
+We are given [chall.py](/media/SSMCTF25//chall5.py), which defines a few mathy-looking functions `baka`, `hyperbaka` and `triple_baka`.
+
+We are also provided with a Linear Congruence Generator (LCG) defined by:
+$$
+x_1=10275910798653121436396833379154598008161 \\
+x_n = ax_{n-1}+b \space (mod \space m)
+$$
+
+$a, b, m$ are some constants unknown to us. Let $k=triplebaka(64)$ We are given $x_1, x_2, ... x_{9}$, and $ct=secret{\space\oplus\space}x_k$. Our goal is to retrieve $x_k$ so that we can calculate $secret=ct{\space\oplus\space}x_k$
+
+#### Reverse-Engineering The LCG
+
+We are given the values from $x_1$ to $x_9$ in [chall.py](/media/SSMCTF25//chall5.py). We first try to solve for $m$, as without it, it is not possible to find the values of $a$ and $b$.
+
+To do so, we try to rewrite the equation into something of the form $x_n-x_{n-1}+x_{n+1}...\equiv0\space(mod{\space}m)$ so that the LHS is a multiple of $m$. We need to make sure the LHS is independent of $a$ and $b$, so that we know the actualy value of the LHS. If we can find enough LHS values that are multiples of $m$, we can take their gcd to find $m$.
+
+First, let's get rid of the $b$ value.
+$$
+\begin{align*}
+    & \space\space\space\space\space\space x_n \equiv ax_{n-1}+b \space && (mod \space m) \\
+    & \Rightarrow x_{n+1} - x_n \equiv (ax_n+b) - (ax_{n-1}+b) && (mod \space m) \\
+    & \Rightarrow x_{n+1} - x_n \equiv a(x_n-x_{n-1}) && (mod \space m) \\
+\end{align*}
+$$
+
+Let $y_n=x_{n+1}-x_n$. From the above, we have $y_n\equiv{a}(x_n-x_{n-1})\space(mod \space m)$. In particular, we observe the following recurrence relation:
+
+$$
+\begin{align*}
+    y_{n+1}&\equiv {a}(x_{n+1}-x_n) && (mod \space m) \\
+    &\equiv a*y_n && (mod \space m) \\
+\end{align*}
+$$
+
+Hence, we can see that
+$$
+\begin{align*}
+    y_{n+2}*y_n&\equiv a*y_{n+1}*y_n && (mod \space m) \\
+    &\equiv y_{n+1}*a*y_n && (mod \space m) \\
+    &\equiv y_{n+1}*y_{n+1} && (mod \space m) \\
+    &\equiv y_{n+1}^2 && (mod \space m) \\
+\end{align*}
+$$
+
+Which gives us the following nice result:
+$$
+y_{n+2}*y_n-y_{n+1}^2\equiv0{\space}(mod \space m)
+$$
+
+Hence, for all values of $n$, $y_{n+2}*y_n-y_{n+1}^2$ is a multiple of $m$. We write a short python script to calculate the gcd across all values of $y_{n+2}*y_n-y_{n+1}^2$.
+
+```python
+from sage.all import * 
+def gcd(a, b):
+    return b if a == 0 else gcd(b % a , a)
+x = [
+    10275910798653121436396833379154598008161,
+    2068591239728841545706452127889450693176,
+    26350147429806384823786121899280661716493,
+    25358475244916002220884659082517978530071,
+    12563752780567442975545946639227178025296,
+    19642601882956204519785723889340847589962,
+    6259116168994041128833294897342371591968,
+    16406333604491605091556863399044907242384,
+    25867766060185127305007083226436225587634
+]
+y = [x[i + 1] - x[i] for i in range(len(x) - 1)]
+u = [abs(y[i + 2] * y[i] - y[i+1] ** 2) for i in range(len(y) - 2)]
+m = 0
+for val in u:
+    m = gcd(m, val)
+print(f"{m = }")
+print(f"{ZZ(m).is_prime() = }")
+
+# Output: 
+# m = 27071808322005969892390787400752803991921
+# ZZ(m).is_prime() = True
+```
+
+Now, we solve for $a$ and $b$, which is relatively trivial now that we know $m$.
+
+Solving for $a$:
+$$
+    y_{n+1} \equiv a * y_n\space(mod{\space}m) \\
+    \Rightarrow a \equiv y_{n+1}*y_{n}^{-1}\space(mod{\space}m)
+$$
+Solving for $b$:
+$$
+    x_n \equiv ax_{n-1}+b \space (mod \space m) \\
+    \Rightarrow b = x_n - ax_{n-1}  \space (mod \space m) 
+$$
+
+#### Finding The Value Of $triplebaka$
+
+Let's analyse what each recursive function does:
+
+```python
+def baka(ba, ka):
+    bakabaka = ba
+    for bakabakabaka in range(ka-1):
+        bakabaka = ba**bakabaka
+    return bakabaka
+```
+
+This one's pretty straightforward, it's just tetration
+
+$$
+\mathrm{baka}(ba,\,ka)
+=
+  \underbrace{%
+    ba^{\,ba^{\,\cdots^{\,ba}}}%
+  }_{ka\text{ times}}
+$$
+
+In Knuth arrow notation, this is simply:
+
+$$
+baka(ba,ka)=ba \,\uparrow\uparrow\, ka
+$$
+
+Now we get to the recursive functions:
+
+```python
+def hyperbaka(ba, ka, bakabaka):
+    if bakabaka == 1:
+        return ba**ka
+    elif ka == 0:
+        return 1
+    elif bakabaka == 2 and ba == ka:
+        return baka(ba, bakabaka)
+    else:
+        bakabakabaka = hyperbaka(ba, ka-1, bakabaka)
+        return hyperbaka(ba, bakabakabaka, bakabaka-1)
+```
+
+This starts to get a bit messy, I just asked ChatGPT and it told me that `hyperbaka` was just the h-th order hyper operation on b and k
+$$
+\mathrm{hyperbaka}(b,k,h)\;=\;b\,\uparrow^{\,h}\,k
+$$
+
+The last, and final function is `triplebaka`
+
+```python
+def triple_baka(n):
+    if n == 1:
+        return hyperbaka(3, 3, 4)
+    else:
+        return hyperbaka(3, 3, triple_baka(n-1))
+```
+
+I asked ChatGPT again and it gave me this
+
+$$
+T_1 \;=\;\mathrm{hyperbaka}(3,3,4)  = 3 \;\uparrow^4\;3 \\
+T_n =\mathrm{hyperbaka}\bigl(3,3,T_{n-1}\bigr) =3\;\uparrow^{\,T_{n-1}}\;3
+$$
+
+Well now $triplebaka=T_{64}$ looks like a really huge number, making it computationally unfeasible for us to calculate x_{triplebaka}. Fortunately since this LCG has a cyclic order of $m - 1$, we just need to find $triplebaka \space mod \space (m-1)$
+
+$triplebaka$, when expanded, looks something like this:
+
+$$
+\mathrm{triplebaka}
+=
+  \underbrace{%
+    3^{\,3^{\,\cdots^{\,3}}}%
+  }_{\text{a lot of times}}
+$$
+
+Since we only want to find $triplebaka (mod{\space}(m - 1))$, we can apply Fermat's last theorem here:
+
+$$
+\begin{align*}
+triplebaka &= 3 ^ {3 ^ {3 ^ {... 3}}} (mod{\space}(m - 1)) \\
+        &= 3 ^ {3 ^ {3 ^ {... 3}} (mod{\space}{\phi}(m - 1))} \\
+        &= 3 ^ {3 ^ {3 ^ {... 3} (mod{\space}{\phi}(\phi(m - 1)))}} \\
+\end{align*}
+$$
+
+Since $phi(m) \leq m$, where equality holds i.f.f $m=1$, eventually $phi(phi(...phi(m - 1)))$ reduces to $1$, which simplifies our calculations. Now we just have to find the point where $phi(phi(...phi(m - 1)))=1$, and from there we can backtrack and calculate $triplebaka (mod{\space}(m - 1))$.
+
+#### Solving For Flag
+
+Finally, we use the closed form for LCGs:
+$$
+x_{N} = (a^N * x_0 + b*(a^N - 1)*(a-1)^{-1}))\space(mod{\space}m)
+$$
+
+My complete solve script can be found [here](/media/SSMCTF25/sol5.py).
+
+### ECSSP
+
+#### Understanding The Challenge
+
+We are given [chall.py](/media/SSMCTF25/chall6.py) that encrypts our flag with some special Elliptic Curve algorithm.
+
+```python
+A = [E.random_point() for _ in range(42)]
+enc = []
+
+m = bin(bytes_to_long(flag))[2:]
+m = m.zfill(len(m)//42*42+42)
+
+for i in range(0,len(m),42):
+    buffer = None
+    for j, bit in enumerate(m[i:i+42]):
+        if bit == '1':
+            if not buffer:
+                buffer = A[j]
+            else:
+                buffer += A[j]
+    enc.append(buffer)
+```
+
+$42$ random points on the curve $E$ are chosen and stored in the list $A$. Our flag is converted to a bitarrray and padded to a length that is a multiple of 42. Each 42-bit chunk is then encoded into a point by using the 42 points in A as a basis.
+
+We are given the 42 points in A alongside the encoded points in [output.txt](/media/SSMCTF25/output_chall6.txt). Our goal is to recover the original bitarray and convert it back into our flag.
+
+#### 0-1 Knapsack
+
+This problem is equivalent to having a 0-1 knapsack, where we are tasked with finding the specific combination of items that give us a particular sum. The idea behind our solution is rather similarly to [this problem](https://codebreaker.xyz/problem/harddisk).
+
+#### Naive Solution
+
+Let $k$ be the number of items we have in our knapsack. We can attempt to create a hash table mapping all possible points to the items that sum up to them. Our hash table would have a size of up to $O(2^k)$. For $k=42$ though, this is unfortunately not computationally feasible.
+
+#### Meet In The Middle
+
+Instead of generating all $2^k$ possible points, we can instead split our $k$ items into two halves, `left` and `right`, each of size $\frac{k}{2}$. For both `left` and `right`, we create a hash table mapping all possible points to the subset of the items in each half that sums up to them.
+
+Now, each hash table will have size of up to $O(2^{\frac{k}{2}})$. For $k=42$, this is approximately $2e6$. To find the subset of the 42 items that sum up to a particular ppoint $P$, we simply iterate through all points, $Q$, in `left`, then check if $P - Q$ exists in `right`.
+
+If it does, then we find the subset of items in `left` that sum up to $Q$, and the subset of items in `right` that sum up to $P - Q$, and join them together to find our answer. Assuming an upper-bound hash-map lookup time of $O(log{\space}n)$ (to account for collisions), our lookup time becomes $O(2^{\frac{k}{2}}{\cdot}log(2^\frac{k}{2}))=O(2^{\frac{k}{2}}{\cdot}k)$, which is much faster than our naive solution of $O(2^k)$. For $k=42$, $O(2^{\frac{k}{2}}{\cdot}k)$ is very much computationally feasible.
+
+My solve script can be found [here](/media/SSMCTF25/sol6.py).
+
