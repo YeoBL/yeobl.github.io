@@ -6,17 +6,17 @@ tags: Crypto
 
 ### General remarks
 
-This was my second time playing a CTF after studying the various Crypto techniques. The first was CDDC but regrettably, they didn't have much Crypto other than a relatively simple ECDSA chall entitled _Timeless MDS_. Overall, the crypto challs in this CTF were fairly interesting, and generally enjoyeable to work on. There were a total of 10 challenges, below are my ratings for each one:
+This was my second time playing a CTF after studying a bunch of Crypto. The first was CDDC but regrettably, they didn't have much Crypto other than a relatively simple ECDSA chall entitled _Timeless MDS_. Overall, the crypto challs in this CTF were fairly interesting, and generally enjoyeable to work on. There were a total of 10 challenges, below are my ratings for each one:
 
 1. [Tariff evaluation (68 solves)](#tariff-evaluation): 4/10
 2. [Cauldron (26 solves)](#cauldron): 5/10
 3. [BB84 2 (22 solves)](#bb84-2): 2/10
 4. [Security Update (18 Solves)](#security-update): 7/10
-5. [Triple Baka (9 solves)](#triple-baka): 8/10
+5. [Triple Baka (9 solves)](#triple-baka): 8.5/10
 6. [ECSSP (9 solves)](#ecssp): 7/10
-7. Ice Kachang (4 solves): 7/10
-8. Milk (3 solves): 7/10
-9. STONKS (2 solves): 8/10
+7. [Ice Kachang (4 solves)](#ice-kachang): 7/10
+8. [Milk (3 solves)](#milk): 7/10
+9. [STONKS (2 solves)](#stonks): 8/10
 10. Change (0 solves): Did Not Solve
 
 ### Tariff Evaluation
@@ -510,6 +510,8 @@ $$
 
 My complete solve script can be found [here](/media/SSMCTF25/sol5.py).
 
+Overall, I thought this was a pretty cool challenge. Prior to this CTF, I never really thought about how computations for tetrations or higher order functions could be done under modulo.
+
 ### ECSSP
 
 #### Understanding The Challenge
@@ -556,3 +558,336 @@ If it does, then we find the subset of items in `left` that sum up to $Q$, and t
 
 My solve script can be found [here](/media/SSMCTF25/sol6.py).
 
+### Ice Kachang
+
+#### Understanding The Challenge
+
+We are given [chall.py](/media/SSMCTF25/chall7.py).
+
+Firstly, the server sets $n = 2^{80}$, which is later used as the modulus for future computations.
+
+Next, the server defines our function `H` which takes in some value `m` and hashes it with a specified hash function `hash_func`. The hash is then converted into an integer, taken modulo $n$ and returned:
+
+```python
+def H(m, hash_func):
+    preimage = long_to_bytes(m)
+    h = hash_func(preimage).digest()
+    return int.from_bytes(h, 'big') % n
+```
+
+The server hashes `flag` with the `blake2b` hashing function and stores it as `ice_kachang`. This value is given to us `ice_kachang=380554279638146175205295`. We now have to choose some items to add to 4 different lists.
+
+In each list, the items will be hashed with 4 different hash functions `blake2b`, `sha1`, `md5` and `sha512`. The hash function used depends on which list the item is in.
+
+Requirements for the items chosen:
+
+- Each list must have at least 1 item
+- The total length of all 4 lists must not exceed 128
+- Summing up the hashed items in all 4 lists must give us `ice_kachang` (under modulo $n$)
+
+If we fulfil all 3 requirements above, the flag will be provided to us. 
+
+```python
+def main():
+    ice_kachang = H(flag, blake2b)
+    print("Let's make Ice Kachang!")
+    print(f"follow the recipe and you should get: {ice_kachang}")
+
+    try:
+        shaved_ice  = [H(m, blake2b) for m in ast.literal_eval(input("Add shaved_ice: "))]
+        red_beans   = [H(m, sha1) for m in ast.literal_eval(input("Add red_beans: "))]
+        jelly       = [H(m, md5) for m in ast.literal_eval(input("Add jelly: "))]
+        syrup       = [H(m, sha512) for m in ast.literal_eval(input("Add syrup: "))]
+
+        assert any(shaved_ice) and any(red_beans) and any(jelly) and any(syrup)
+        assert len(shaved_ice + red_beans + jelly + syrup) <= 128
+    except:
+        print("You didn't follow the recipe!")
+        quit()
+
+    if sum(shaved_ice + red_beans + jelly + syrup) % n == ice_kachang:
+        print(flag)
+    else:
+        print("You did not cook \U0001F614")
+```
+
+#### Reframing The Challenge
+
+Instead of finding 4 lists that have their hashes sum up to `ice_kachang`, I fixed `shaved_ice`, `red_beans` and `syrup` as `[1]`, then found the target value for `jelly` such that `sum(shaved_ice + red_beans + jelly + syrup) % n == ice_kachang`.
+
+```python
+from hashlib import blake2b, sha1, md5, sha512
+from Crypto.Util.number import long_to_bytes
+
+MOD = 2 ** 80
+
+def H(m, hash_func):
+    preimage = long_to_bytes(m)
+    h = hash_func(preimage).digest()
+    return int.from_bytes(h, 'big') % MOD
+
+ice_kachang = 380554279638146175205295
+shaved_ice  = [H(m, blake2b) for m in [1]]
+red_beans   = [H(m, sha1) for m in [1]]
+syrup       = [H(m, sha512) for m in [1]]
+target = (ice_kachang - sum(shaved_ice + red_beans + syrup)) % MOD
+```
+
+#### Finding A Possible List
+
+To find a list that has its hashes sum up to `target`, I used LLL (shorthand for _Lenstra–Lenstra–Lovász lattice basis reduction algorithm_). This [15-min tutorial](https://www.youtube.com/watch?v=vREqxm0j784) on what it does and how you can use it was really useful for me. It doesn't cover how the algorithm works under the hood, but for purposes of solving this CTF the video is sufficient.
+
+##### Note: the below explanation assumes you have sufficient knowledge of how LLL works
+
+To start off, we randomly generate 40 different values and hash them with `md5`. Let the array of hashed values be $A$. We check if there exists some coefficient array $B$ s.t. the following conditions holds:
+
+$$
+\begin{align*}
+    &(1) && \sum_{i=1}^{40} B_i{\cdot}A_i = target{\space}(mod{\space}n) \\
+    &(2) && \forall b \in B, b \geq 0 \\
+    &(3) && \sum_{i=1}^{40}B_i \leq 125
+\end{align*}
+$$
+
+To find a solution that satisfies (1), we can set up our LLL matrix like this:
+
+$$
+\begin{array}{|c|c|c|c|c|c|c|c|}
+\hline
+\text{Row\textbackslash Col} & 1 & 2 & 3 & 4 & \cdots & 41 & 42 \\ \hline
+1 & A_1         & 1 & 0 & 0      & \cdots & 0 & 0 \\ \hline
+2 & A_2         & 0 & 1 & 0      & \cdots & 0 & 0 \\ \hline
+\vdots      & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\ \hline
+40 & A_{40}      & 0 & 0 & 0      & \cdots & 1 & 0 \\ \hline
+41 & \text{-target} & 0 & 0 & 0   & \cdots & 0 & 1 \\ \hline
+42 & 2^{80}      & 0 & 0 & 0      & \cdots & 0 & 0 \\ \hline
+\end{array}
+$$
+
+Our 42-th row is to facilitate the summation of hashes modulo $2^{80}$. The reason for the 41-th row is explained in the [above video](https://www.youtube.com/watch?v=vREqxm0j784).
+
+After applying LLL, we want to find a row that looks like this:
+
+$$
+\begin{array}{|c|c|c|c|c|c|c|c|}
+\hline
+0 & B_1 & B_2 & B_3 & B_4 & \cdots & B_{40} & 1 \\ \hline
+\end{array}
+$$
+
+This works great, but it almost always fails to satisfy the condition in (2). This is because LLL merely aims to minimize the **magnitude** of the vector length, it does not care about the polarity of it's coordinates. To wit, LLL makes no distinction between a vector coordinate of $-1$ and $1$ as they both have the same contribution to the vector length.
+
+To ensure that (2) holds, we have to somehow trick LLL into making $B_1, B_2, \cdots, B_{40}$ positive, even at the cost of increasing the vector's magnitude.
+
+Looking at the $41$-th row in our original matrix, we realise we already did something similar by tricking LLL into finding a row where $\sum_{i=1}^{40} B_i{\cdot}A_i$ is as close to $target$ as possible instead of $0$, by setting the $-target$ value in column $1$.
+
+We can apply the same trick to our other columns from $2$ to $41$, by choosing some $k$ and setting $matrix[41][2:41]=-k$, so that LLL will find a solution where $B_i$ is as close to $k$ as possible for all $i \in [1, 40]$.
+
+Our new matrix is now:
+$$
+\begin{array}{|c|c|c|c|c|c|c|c|}
+\hline
+\text{Row\textbackslash Col} & 1 & 2 & 3 & 4 & \cdots & 41 & 42 \\ \hline
+1 & A_1         & 1 & 0 & 0      & \cdots & 0 & 0 \\ \hline
+2 & A_2         & 0 & 1 & 0      & \cdots & 0 & 0 \\ \hline
+\vdots      & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\ \hline
+40 & A_{40}      & 0 & 0 & 0      & \cdots & 1 & 0 \\ \hline
+41 & \text{-target} & -k & -k & -k   & \cdots & -k & 1 \\ \hline
+42 & 2^{80}      & 0 & 0 & 0      & \cdots & 0 & 0 \\ \hline
+\end{array}
+$$
+
+The row we are interested in would be:
+$$
+\begin{array}{|c|c|c|c|c|c|c|c|}
+\hline
+0 & B_1 - k & B_2 - k & B_3 - k & B_4 - k & \cdots & B_{40} - k & 1 \\ \hline
+\end{array}
+$$
+
+To retrieve $B$, we simply find that row and drop the first and last value. We then add $k$ to all its elements.
+
+We also want condition (3) to hold, hence we should choose $k \leq \lfloor \frac{125}{40}\rfloor$. This is because LLL is finding a solution where $B_i$ is as close to $k$ as possible, hence $\sum_{i=1}^{40}B_i \approx 40k$. I chose $k=2$. Lastly, I wrapped everything in a loop. If LLL is unable to find a solution that satisfies us, we restart from the beginning and pick $40$ new hash values, of which we check if a satisfactory solution exists.
+
+#### Note: The number of hashes generated per iteration was arbitrarily decided; from empirical observations, numbers between 40 - 60 all work pretty well
+
+Afterwards, for each $i \in [1, 40]$, we add in $B_i$ copies of the corresponding hash into our list.
+
+My [solve script](/media/SSMCTF25/sol7.py).
+
+Apparently the intended solution was [Wagner's Algorithm](https://conduition.io/cryptography/wagner/) but I was lowkey lazy to read it because the page was so damn long and LLL seemed like the most straightforward way to cheese it. Perhaps for learning I should've just read up on Wagner's.
+
+### Milk
+
+#### Understanding The Challenge
+
+We are given [chall.py](/media/SSMCTF25/chall8.py), a python script that implements ECC addition and multiplication. The implementation looks correct, and ChatGPT thinks the same too.
+
+The code goes on to create 2 curves, `curve_25519` and `M_221` (parameters below), alongisde their generators, $G_1$ and $G_2$. A secret 200-bit key $k$ is created, and we are given $pt_1=k*G_1$ and $pt_2=k*G_2$.
+
+```python
+curve_25519_p = 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed
+curve_25519_a = 0x76d06
+curve_25519_b = 0x01
+
+M_221_p = 0x1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD
+M_221_a = 0x01c93a
+M_221_b = 0x01
+
+#G1 = (47063170801806052288146673528871417153526850064394483981146410830175982208544, 53518176899357161526249489715124114639791104549020667616657543916324221249348)
+#G2 = (44463004732374493397893178641833179486751816974247573994673798864, 1106794713284151358838640453450775713656116663772692522843863128471)
+#pt1 = (56710714175061483991870664898200691885016604747806913517177632746453560406455, 22183016490403262414869646241566186015038886824498859131560775826194154678831)
+#pt2 = (861801353887926730429905301581104022799000762265859378776929570795, 2414525705848701236524399200022909146362752492100235869363750117869)
+#iv = 'c001a9fe49c5eaee271777f7deac8eb8', ct = '12068639a25f527caf97b8f8572723571ebf212cf673e71b5e705f99404cc50e97a5dbbde566ea52fde3bf8caaede3629ede5731bb4340c27a6b352636546f02'
+```
+
+Our goal is to retrieve $k$, which will provide us the AES key to decrypt `ct` and find the flag.
+
+#### Checking the Properties of $G_1$ and $G_2$
+
+The first thing we do when getting ECC problems of this type is to always check the generators' orders and their factorization
+
+```python
+from sage.all import *
+p1 = 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFED
+a1 = 0x76d06
+b1 = 0x01
+F1 = GF(p1)
+E1 = EllipticCurve(F1, [a1, b1])
+G1 = E1(
+    47063170801806052288146673528871417153526850064394483981146410830175982208544,
+    53518176899357161526249489715124114639791104549020667616657543916324221249348
+)
+pt1 = E1(
+    56710714175061483991870664898200691885016604747806913517177632746453560406455,
+    22183016490403262414869646241566186015038886824498859131560775826194154678831
+)
+print(f"{factor(G1.order()) = }")
+
+p2 = 0x1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD
+a2 = 0x01C93A
+b2 = 0x01
+F2 = GF(p2)
+E2 = EllipticCurve(F2, [a2, b2])
+G2 = E2(
+    44463004732374493397893178641833179486751816974247573994673798864,
+    1106794713284151358838640453450775713656116663772692522843863128471
+)
+pt2 = E2(
+    861801353887926730429905301581104022799000762265859378776929570795,
+    2414525705848701236524399200022909146362752492100235869363750117869
+)
+assert pt2 in E2
+print(f"{factor(G2.order()) = }")
+
+# Output: 
+# factor(G1.order()) = 2^2 * 107 * 227 * 2988429752821 * 20521106721679 * 9717072376851441320839385622987046588330658333
+# factor(G2.order()) = 2 * 3 * 3562267 * 844201807 * 1475029691 * 13706808241494547 * 9237787054346177764453243
+```
+
+#### Leaking Information about $k$
+
+From the factorization, it looks like we don't exactly have a smooth curve, but there are plenty of small factors (all factors less than or equal to $20521106721679$) that we can leak using Pohlig-Hellman.
+
+```python
+# Note: this might take a couple of minutes to run
+def dnc_log_factors(base, P, verbose=True):
+    ord = base.order()
+    remainders, factors = [], []
+    for prime, exponent in factor(ord):
+        mult = (ord // (prime ** exponent))
+        if prime ** exponent > 20521106721679:
+            continue
+        P_new, base_new = P * mult, base * mult
+        dlog = P_new.log(base_new)
+        if verbose:
+            print(prime ** exponent, dlog)
+        assert P_new == dlog * base_new
+        factors.append(prime ** exponent)
+        remainders.append(dlog)
+    return remainders, factors
+
+dnc_log_factors(G2, pt2)
+dnc_log_factors(G1, pt1)
+
+# Output:
+# 2 1
+# 3 2
+# 3562267 1452015
+# 844201807 129853961
+# 1475029691 573227031
+# 4 1
+# 107 12
+# 227 153
+# 2988429752821 2125536701115
+# 20521106721679 17921044611639
+```
+
+Now with all these divisors and remainders, we can apply Chinese Remainder Theorem (CRT) to find a general formula for $k$.
+
+```python
+div = [4, 107, 227, 2988429752821, 20521106721679, 3, 3562267, 844201807, 1475029691]
+rem = [1, 12, 153, 2125536701115, 17921044611639, 2, 1452015, 129853961, 573227031]
+m = 1
+
+iv = 'c001a9fe49c5eaee271777f7deac8eb8'
+ct = '12068639a25f527caf97b8f8572723571ebf212cf673e71b5e705f99404cc50e97a5dbbde566ea52fde3bf8caaede3629ede5731bb4340c27a6b352636546f02'
+
+for num in div:
+    m *= num
+res = crt(rem, div)
+```
+
+We note that $k \equiv res \space (mod \space m)$, hence $k = res + n \cdot mult, n \in \Z$.
+
+Further, we note that $k$ was generated with `k = getPrime(200)`. When we run `print(mult.bit_length())`, we get $186$. Hence, $n$ has at most $200-186=14$ bits (i.e. $2^{14}=16384$ possibilities).
+
+$16384$ is a pretty small number, so we simply try all $16384$ possibilities of $k$, where $n \in [0, 16384)$ and check if the decrypted plaintext contains the flag wrapper `SSMCTF`.
+
+```python
+from Crypto.Cipher import AES
+import hashlib
+from Crypto.Util.Padding import unpad
+from tqdm import tqdm
+
+def decrypt_flag(secret: int, iv_hex: str, ct_hex: str) -> bytes:
+    h = hashlib.sha1()
+    h.update(str(secret).encode('ascii'))
+    key = h.digest()[:16]
+
+    iv = bytes.fromhex(iv_hex)
+    ct = bytes.fromhex(ct_hex)
+
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    pt_padded = cipher.decrypt(ct)
+
+    if b'SSMCTF' in pt_padded:
+        print(pt_padded)
+
+    try:
+        pt = unpad(pt_padded, AES.block_size)
+    except ValueError as e:
+        raise ValueError("Decryption succeeded but padding was invalid") from e
+
+    return pt
+
+iv = 'c001a9fe49c5eaee271777f7deac8eb8'
+ct = '12068639a25f527caf97b8f8572723571ebf212cf673e71b5e705f99404cc50e97a5dbbde566ea52fde3bf8caaede3629ede5731bb4340c27a6b352636546f02'
+
+for idx in tqdm(range(2 ** 200 // mult)):
+    try:
+        ans = decrypt_flag(res, iv, ct)
+    except:
+        pass
+    res = res + mult
+```
+
+My [solve script](/media/SSMCTF25/sol8.py).
+
+### STONKS
+
+#### Understanding The Challenge
+
+We are given [chall.py](/media/SSMCTF25/chall9.py).
+
+[My solve script](/media/SSMCTF25/sol9.py).
