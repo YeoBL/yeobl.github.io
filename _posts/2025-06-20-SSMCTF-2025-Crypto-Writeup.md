@@ -654,7 +654,7 @@ To find a solution that satisfies (1), we can set up our LLL matrix like this:
 $$
 \begin{array}{|c|c|c|c|c|c|c|c|}
 \hline
-\text{Row\textbackslash Col} & 1 & 2 & 3 & 4 & \cdots & 41 & 42 \\ \hline
+\text{Row \char`\\ Col} & 1 & 2 & 3 & 4 & \cdots & 41 & 42 \\ \hline
 1 & A_1         & 1 & 0 & 0      & \cdots & 0 & 0 \\ \hline
 2 & A_2         & 0 & 1 & 0      & \cdots & 0 & 0 \\ \hline
 \vdots      & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\ \hline
@@ -687,7 +687,7 @@ Our new matrix is now:
 $$
 \begin{array}{|c|c|c|c|c|c|c|c|}
 \hline
-\text{Row\textbackslash Col} & 1 & 2 & 3 & 4 & \cdots & 41 & 42 \\ \hline
+\text{Row \char`\\ Col} & 1 & 2 & 3 & 4 & \cdots & 41 & 42 \\ \hline
 1 & A_1         & 1 & 0 & 0      & \cdots & 0 & 0 \\ \hline
 2 & A_2         & 0 & 1 & 0      & \cdots & 0 & 0 \\ \hline
 \vdots      & \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\ \hline
@@ -838,7 +838,7 @@ for num in div:
 res = crt(rem, div)
 ```
 
-We note that $k \equiv res \space (mod \space m)$, hence $k = res + n \cdot mult, n \in \Z$.
+We note that $k \equiv res \space (mod \space m)$, hence $k = res + n \cdot mult, n \in \mathbb{Z}$.
 
 Further, we note that $k$ was generated with `k = getPrime(200)`. When we run `print(mult.bit_length())`, we get $186$. Hence, $n$ has at most $200-186=14$ bits (i.e. $2^{14}=16384$ possibilities).
 
@@ -1041,7 +1041,7 @@ As it turns out, LLL can indeed help us quickly recover $c$, due to the fact tha
 $$
 \begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\text{Row\textbackslash Col} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+\text{Row \char`\\ Col} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
 1 & x_0 & x_1 & x_2 & x_3 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
 2 & x_0^2 & x_1^2 & x_2^2 & x_3^2 & 0 & 0 & 1 & 0 & 0 & 0 \\ \hline
 3 & x_0^3 & x_1^3 & x_2^3 & x_3^3 & 0 & 0 & 0 & 1 & 0 & 0 \\ \hline
