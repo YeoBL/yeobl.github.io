@@ -324,7 +324,9 @@ We are given [chall.py](/media/SSMCTF25//chall5.py), which defines a few mathy-l
 
 We are also provided with a Linear Congruence Generator (LCG) defined by:
 $$
-x_1=10275910798653121436396833379154598008161 \\
+x_1=10275910798653121436396833379154598008161
+$$
+$$
 x_n = ax_{n-1}+b \space (mod \space m)
 $$
 
