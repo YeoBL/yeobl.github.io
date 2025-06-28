@@ -371,7 +371,7 @@ $$
 y_{n+2}*y_n-y_{n+1}^2\equiv0{\space}(mod \space m)
 $$
 
-Hence, for all values of $n$, $y_{n+2}*y_n-y_{n+1}^2$ is a multiple of $m$. We write a short python script to calculate the gcd across all values of $y_{n+2}*y_n-y_{n+1}^2$.
+Hence, for all values of $n$, $ y_{n+2}*y_n-y_{n+1}^2 $ is a multiple of $ m $. We write a short python script to calculate the gcd across all values of $ y_{n+2}*y_n-y_{n+1}^2 $.
 
 ```python
 from sage.all import * 
