@@ -890,6 +890,179 @@ My [solve script](/media/SSMCTF25/sol8.py).
 
 We are given [chall.py](/media/SSMCTF25/chall9.py).
 
-TBC...
+The script first starts by defining a few values:
+
+1. $tf$, a 48 bit random integer
+2. $p = 2^{128} - 159$
+3. $q$, a 256 bit random prime
+4. $g=2$
+
+```python
+tf = getrandbits(48)
+
+p =  2**128 - 159
+q = getPrime(256)
+g = 2
+```
+
+At each turn, we can choose to either buy, or sell stonks. The selling function is permanently disabled, so we'll only look at what happens when we choose to buy.
+
+```python
+    elif inp == 2:
+        print("Error: selling is disabled, STONKS ONLY GO UP!")
+```
+
+It appears that when we buy stonks, the make_random_share() function is called, with varying parameters depending on which stonk is purchased. Afterwards, we are given the value of `shares` (truncated to length 4) and `vv`.
+
+```python
+stonk = choice([GOOGL, AMZN, META, MSFT, AAPL, NVDA, TSLA])
+shares, vv = stonk()
+print(f"Trade executed: {randint(1,100)} of ${stonk.__name__} bought at ${randint(1,1000)} per share")
+print(f"Transaction Details: {shares[:4]}\n{vv}")
+```
+
+```python
+def GOOGL():
+    return make_random_shares(5, 12)
+
+def AMZN():
+    return make_random_shares(6, 16)
+
+def META():
+    return make_random_shares(5, 15)
+
+def MSFT():
+    return make_random_shares(7, 17)
+
+def AAPL():
+    return make_random_shares(6, 12)
+
+def NVDA():
+    return make_random_shares(7, 16)
+
+def TSLA():
+    return make_random_shares(8, 13)
+```
+
+The `make_random_shares` function takes in 2 parameters (`minimum` and `num_shares`) then creates a few lists, which can be found below. For convenience, let $r(x)$ be a random $x$-bit integer, and $c$ = `coefficients`.
+
+1. `coefficients` (a.k.a. $c$) = [$tf$, $r_{59}$, $r_{59}$, $\cdots$, , $r_{59}$] (Note: `coefficients.length` = `minimum`)
+2. `vv` = [$2^{c_1}$, $2^{c_2}$, $\cdots$, $2^{c_k}$], all elements are taken modulo $q$
+3. `shares.x` = [$r_{128}$, $r_{128}$, $\cdots$, $r_{128}$]
+4. `shares.y` = [$s_1, s_2, \cdots, s_k$], $s_k = \sum_{i=1}^{n} c_i \cdot x_k^{i}$ all elements are taken modulo $p$
+
+```python
+def make_random_shares(minimum, num_shares):
+    coefficients = [tf]
+    vv = [pow(g, tf, q)]
+
+    for i in range(1, minimum):
+        r = randint(2**58, 2**59)
+        coefficients.append(r)
+        vv.append(pow(g, r, q))
+
+    shares = []
+    for _ in range(num_shares):
+        x = randint(2**127, 2**128)
+        y = 0
+        for power, coeff in enumerate(coefficients):
+            y = (y + coeff * pow(x, power, p)) % p
+        shares.append((x, y))
+
+    return shares, vv
+```
+
+Our goal is to find the value of $tf$, and give it to the server to obtain the flag.
+
+```python
+elif inp == 7828322:
+    what = int(input("Sir, this is a casino. "))
+    if what == tf:
+        print(FLAG)
+        quit()
+```
+
+#### Analysing Our Information
+
+On first sight, this appears to be a trivial chall, until we realise that the server is giving us partial information for most of the ouputs.
+
+Since we do not know what $q$ is, the information in `vv` becomes difficult to use as the values were taken under some modulo unknown to us. Further, since the `shares` list is truncated to a length of 4.
+
+Regardless, let's still try to set up the equations we have and see what we can get.
+
+We want to have as minimal information lost as possible, so ideally we keep buying stonks until we get either or `GOOGL` or `META` as those two have `shares` with original length 5, hence only the last element is truncated. In comparison, TSLA's `shares` original list has length 8, which means 4 values are truncated.
+
+For both `GOOGL` and `META`, $c$ has a length of $5$.
+
+$$
+\begin{align}
+    \begin{bmatrix}
+        y_{1} \\ y_{2} \\ y_{3} \\ y_{4} \\
+    \end{bmatrix}
+    =
+    tf \cdot
+    \begin{bmatrix}
+        1 \\ 1 \\ 1 \\ 1 \\
+    \end{bmatrix}
+    +
+    c_2 \cdot
+    \begin{bmatrix}
+        x_1 \\ x_2 \\ x_3 \\ x_4 \\
+    \end{bmatrix}
+    +
+    c_3 \cdot
+    \begin{bmatrix}
+        x_1^2 \\ x_2^2 \\ x_3^2 \\ x_4^2 \\
+    \end{bmatrix}
+    +
+    c_4 \cdot
+    \begin{bmatrix}
+        x_1^3 \\ x_2^3 \\ x_3^3 \\ x_4^3 \\
+    \end{bmatrix}
+    +
+    c_5 \cdot
+    \begin{bmatrix}
+        x_1^4 \\ x_2^4 \\ x_3^4 \\ x_4^4 \\
+    \end{bmatrix}
+    (mod \space p)
+\end{align}
+$$
+
+Our goal is to find $c$. Even if we attempt to convert this into a matrix multiplication, it would not be uniquely solveable as our matrix would have a rank of at most 4, while its column count is 5. By rank-nullity theorem, we would have a nullity of $5-4=1$, which gives us $p$ solutions for $c$. 
+
+#### Solving For $c$
+
+However, we notice a quirk in the parameter generation of $c$, that $tf$ is a 48-bit integer, and the other values of $c$ are all 59-bit integers. These values are much smaller than those in $x$, $y$ or even $p$ which are all 128-bit integers, hinting at an LLL solution.
+
+If you're not familiar with LLL, this [15-min tutorial](https://www.youtube.com/watch?v=vREqxm0j784) might be of great help. The below solution explanation assumes you have knowledge of what LLL does and how it can be used.
+
+As it turns out, LLL can indeed help us quickly recover $c$, due to the fact that $c$ is much smaller than the other variables here. This was my LLL matrix:
+
+$$
+\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\text{Row\textbackslash Col} & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ \hline
+1 & x_0 & x_1 & x_2 & x_3 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+2 & x_0^2 & x_1^2 & x_2^2 & x_3^2 & 0 & 0 & 1 & 0 & 0 & 0 \\ \hline
+3 & x_0^3 & x_1^3 & x_2^3 & x_3^3 & 0 & 0 & 0 & 1 & 0 & 0 \\ \hline
+4 & x_0^4 & x_1^4 & x_2^4 & x_3^4 & 0 & 0 & 0 & 0 & 1 & 0 \\ \hline
+5 & -y_0 & -y_1 & -y_2 & -y_3 & 0 & 0 & 0 & 0 & 0 & 2^{300} \\ \hline
+6 & p & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+7 & 0 & p & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+8 & 0 & 0 & p & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+9 & 0 & 0 & 0 & p & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+\end{array}
+$$
+
+The row we are interested in getting is of the following form:
+
+$$
+\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+-tf & -tf & -tf & -tf & 0 & c_1 & c_2 & c_3 & c_4 & 2^{300}\\ \hline
+\end{array}
+$$
+
+From there, we extract $tf$ and send it to the server to get our flag.
 
 [My solve script](/media/SSMCTF25/sol9.py).
