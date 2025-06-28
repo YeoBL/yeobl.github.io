@@ -371,7 +371,7 @@ $$
 y_{n+2}*y_n-y_{n+1}^2\equiv0{\space}(mod \space m)
 $$
 
-Hence, for all values of $n$, $ y_{n+2}*y_n-y_{n+1}^2 $ is a multiple of $ m $. We write a short python script to calculate the gcd across all values of $ y_{n+2}*y_n-y_{n+1}^2 $.
+Hence, for all values of $n$, $y_{n+2} \cdot y_n-y_{n+1}^2$ is a multiple of $m$. We write a short python script to calculate the gcd across all values of $y_{n+2} \cdot y_n-y_{n+1}^2$.
 
 ```python
 from sage.all import * 
@@ -518,7 +518,7 @@ Overall, I thought this was a pretty cool challenge. Prior to this CTF, I never 
 
 #### Understanding The Challenge
 
-We are given [chall.py](/media/SSMCTF25/chall6.py) that encrypts our flag with some special Elliptic Curve algorithm.
+We are given [chall.py](/media/SSMCTF25/chall6.py) that encodes our flag with some special Elliptic Curve algorithm.
 
 ```python
 A = [E.random_point() for _ in range(42)]
@@ -725,7 +725,7 @@ Apparently the intended solution was [Wagner's Algorithm](https://conduition.io/
 
 We are given [chall.py](/media/SSMCTF25/chall8.py), a python script that implements ECC addition and multiplication. The implementation looks correct, and ChatGPT thinks the same too.
 
-The code goes on to create 2 curves, `curve_25519` and `M_221` (parameters below), alongisde their generators, $G_1$ and $G_2$. A secret 200-bit key $k$ is created, and we are given $pt_1=k*G_1$ and $pt_2=k*G_2$.
+The code goes on to create 2 curves, `curve_25519` and `M_221` (parameters below), alongisde their generators, $G_1$ and $G_2$. A secret 200-bit key $k$ is created, and we are given $pt_1=k \cdot G_1$ and $pt_2=k \cdot G_2$.
 
 ```python
 curve_25519_p = 0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffed
