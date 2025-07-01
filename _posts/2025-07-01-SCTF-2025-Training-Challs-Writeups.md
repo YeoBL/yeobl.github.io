@@ -12,9 +12,9 @@ Here are the challs I set and their writeups
 
 1. [Baby RSA](#baby-rsa)
 
-### Baby RSA
+## Baby RSA
 
-#### Description
+### Description
 
 RSA is a widely used public key cryptosystem. In this challenge, you will be given a public key and a ciphertext. Can you decrypt the ciphertext and find the flag?
 
@@ -22,13 +22,13 @@ Files provided:
 
 - [values.txt](/media/SCTF25/values.txt)
 
-#### Writeup
+### Writeup
 
 First, let's start by understanding how RSA works.
 
 Let's say Alice wants to create a channel for Bob to send encrypted messages to her that no one else can read. She goes through this process:
 
-##### Key Generaton (code sameple below)
+#### Key Generaton (code sameple below)
 
 1. Alice selects two large prime numbers, $p$ and $q$
 2. She computes $N = p \cdot q$, $N$ will serve as the _modulus_ for our encryption later on
@@ -66,7 +66,7 @@ print(f"{phi_N = }")
 
 Now, Bob has received the public key pair, $(N,e)$. He follows these steps to encrypt a secret message, $msg$
 
-##### Encryption (code sample below)
+#### Encryption (code sample below)
 
 1. Bob converts his message, $msg$ to an integer, $pt$; we can use python's `pycryptodome` library to do this
 2. Next, he encrypts $pt$ into $ct$ with the formula $ct \equiv pt^{e} \space (mod \space N)$; `e=0x1001` is a common choice of $e$
@@ -90,7 +90,7 @@ print(f"{ct = }")
 
 Even if an eavesdropper, Eve, somehow intercepts the message $ct$, she will not be able to decrypt it into $pt$ if it is properly encrypted.
 
-##### Decryption (code sample below)
+#### Decryption (code sample below)
 
 1. Alice computes $d \equiv e^{-1} \space (mod \space \phi (N))$
 2. Using the formula $ct^{d} \equiv pt \space (mod \space N)$, Alice retrieves $pt$
@@ -120,7 +120,7 @@ print(f"{msg = }")
 
 You might ask, why does $ct^{d} \equiv pt \space (mod \space N)$ hold? To answer this, we need to take a look at [Euler's Theorem](https://en.wikipedia.org/wiki/Euler%27s_theorem) which tells us that for any 2 coprime integers $(a, n), $a ^{\phi (n)} \equiv 1 \space (mod \space n)$
 
-Here, $gcd(pt, N) = 1$ holds (it holds for > 99.999% values of $pt$) too. The corollary is that $pt^{\phi (N)} \equiv 1 \space (mod N)$.
+Here, $gcd(pt, N) = 1$ holds (it holds for > 99.999% values of $pt$, in fact only $\frac{\phi (N)}{N}$ values $\in [1, N)$ have a $gcd >1$). The corollary is that $pt^{\phi (N)} \equiv 1 \space (mod \space N)$.
 
 By choosing $d \equiv e^{-1} \space (mod \space \phi (N))$, we get $e \cdot d \equiv 1 \space (mod \space \phi (N)) \Rarr e \cdot d = k \cdot \phi (N) + 1, k \in \mathbb{Z}$
 
