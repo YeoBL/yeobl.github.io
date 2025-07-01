@@ -711,7 +711,7 @@ To retrieve $B$, we simply find that row and drop the first and last value. We t
 
 We also want condition (3) to hold, hence we should choose $k \leq \lfloor \frac{125}{40}\rfloor$. This is because LLL is finding a solution where $B_i$ is as close to $k$ as possible, hence $\sum_{i=1}^{40}B_i \approx 40k$. I chose $k=2$. Lastly, I wrapped everything in a loop. If LLL is unable to find a solution that satisfies us, we restart from the beginning and pick $40$ new hash values, of which we check if a satisfactory solution exists.
 
-#### Note: The number of hashes generated per iteration was arbitrarily decided; from empirical observations, numbers between 40 - 60 all work pretty well
+##### Note: The number of hashes generated per iteration was arbitrarily decided; from empirical observations, numbers between 40 - 60 all work pretty well
 
 Afterwards, for each $i \in [1, 40]$, we add in $B_i$ copies of the corresponding hash into our list.
 
