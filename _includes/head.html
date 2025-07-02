@@ -79,7 +79,11 @@
   <script src="/js/highlightjs/languages/xml.min.js"></script>
 
   <!-- 4. Initialize highlighting -->
-  <script>hljs.highlightAll();</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      hljs.highlightAll();
+    });
+  </script>
   <!-- end highlight.js support -->
 </head>
 
