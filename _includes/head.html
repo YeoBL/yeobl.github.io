@@ -55,17 +55,31 @@
   </script>
   <!-- end mathjax support -->
 
-  <!-- highlight.js support -->
-  <link rel="stylesheet" href="/js/highlightjs/styles/github.css">
-  <link rel="stylesheet" href="/js/highlightjs/styles/ssms.css" />
+  <!-- 1. Atom One Dark theme -->
+  <link
+    rel="stylesheet"
+    href="/js/highlightjs/styles/atom-one-dark.min.css"
+  />
 
-  <script type="text/javascript" src="/js/highlightjs/highlight.min.js"></script>
+  <!-- 2. Highlight.js core -->
+  <script
+    type="text/javascript"
+    src="/js/highlightjs/highlight.min.js"
+  ></script>
 
-  <script type="text/javascript" src="/js/highlightjs/languages/plaintext.min.js"></script>
-  <script type="text/javascript" src="/js/highlightjs/languages/powershell.min.js"></script>
-  <script type="text/javascript" src="/js/highlightjs/languages/tsql.min.js"></script>
+  <!-- 3. Common language definitions -->
+  <script src="/js/highlightjs/languages/javascript.min.js"></script>
+  <script src="/js/highlightjs/languages/python.min.js"></script>
+  <script src="/js/highlightjs/languages/bash.min.js"></script>
+  <script src="/js/highlightjs/languages/go.min.js"></script>
+  <script src="/js/highlightjs/languages/java.min.js"></script>
+  <script src="/js/highlightjs/languages/cpp.min.js"></script>
+  <script src="/js/highlightjs/languages/rust.min.js"></script>
+  <script src="/js/highlightjs/languages/ruby.min.js"></script>
+  <script src="/js/highlightjs/languages/xml.min.js"></script>
 
-  <script type="text/javascript"> hljs.highlightAll(); </script>
+  <!-- 4. Initialize highlighting -->
+  <script>hljs.highlightAll();</script>
   <!-- end highlight.js support -->
 </head>
 

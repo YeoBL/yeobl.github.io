@@ -118,11 +118,11 @@ msg = long_to_bytes(pt).decode()
 print(f"{msg = }")
 ```
 
-You might ask, why does $ct^{d} \equiv pt \space (mod \space N)$ hold? To answer this, we need to take a look at [Euler's Theorem](https://en.wikipedia.org/wiki/Euler%27s_theorem) which tells us that for any 2 coprime integers $(a, n), $a ^{\phi (n)} \equiv 1 \space (mod \space n)$
+You might ask, why does $ct^{d} \equiv pt \space (mod \space N)$ hold? To answer this, we need to take a look at [Euler's Theorem](https://en.wikipedia.org/wiki/Euler%27s_theorem) which tells us that for any 2 coprime integers $(a, n)$, $a ^{\phi (n)} \equiv 1 \space (mod \space n)$
 
-Here, $gcd(pt, N) = 1$ holds (it holds for > 99.999% values of $pt$, in fact only $\frac{\phi (N)}{N}$ values $\in [1, N)$ have a $gcd >1$). The corollary is that $pt^{\phi (N)} \equiv 1 \space (mod \space N)$.
+Here, $gcd(pt, N) = 1$ holds (it holds for > 99.999% values of $pt$, in fact only $\frac{\phi (N)}{N}$ values $\in [1, N)$ have a $gcd of 1$). The corollary is that $pt^{\phi (N)} \equiv 1 \space (mod \space N)$.
 
-By choosing $d \equiv e^{-1} \space (mod \space \phi (N))$, we get $e \cdot d \equiv 1 \space (mod \space \phi (N)) \Rarr e \cdot d = k \cdot \phi (N) + 1, k \in \mathbb{Z}$
+By choosing $d \equiv e^{-1} \space (mod \space \phi (N))$, we get $e \cdot d \equiv 1 \space (mod \space \phi (N)) \Rightarrow e \cdot d = k \cdot \phi (N) + 1, k \in \mathbb{Z}$
 
 Applying the aforementioned formula, we get 
 
@@ -140,7 +140,7 @@ $$
 
 #### Retrieving The Flag
 
-Now that we know how RSA works, let's retrieve the flag with the given values:
+Now that we know how RSA works, let's retrieve the flag with the values in the challenge:
 
 ```python
 N = 138312773741877291672357397663809010934140453857971665783406363279809934372759262739011787973458255321308759704546691267715470612972075635684713198071066863926094313139733670436026979253138676514853751406467734056724479988541636788408198686566031787831322699142635868515592233916796854802444681820907099084549
