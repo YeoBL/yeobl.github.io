@@ -55,30 +55,18 @@
   </script>
   <!-- end mathjax support -->
 
-  <!-- 1. Atom One Dark theme -->
+  <!-- Atom One Dark theme -->
   <link
     rel="stylesheet"
-    href="/js/highlightjs/styles/atom-one-dark.min.css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
   />
 
-  <!-- 2. Highlight.js core -->
+  <!-- Highlight.js “pack” bundle (core + all languages) -->
   <script
-    type="text/javascript"
-    src="/js/highlightjs/highlight.min.js"
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"
   ></script>
 
-  <!-- 3. Common language definitions -->
-  <script src="/js/highlightjs/languages/javascript.min.js"></script>
-  <script src="/js/highlightjs/languages/python.min.js"></script>
-  <script src="/js/highlightjs/languages/bash.min.js"></script>
-  <script src="/js/highlightjs/languages/go.min.js"></script>
-  <script src="/js/highlightjs/languages/java.min.js"></script>
-  <script src="/js/highlightjs/languages/cpp.min.js"></script>
-  <script src="/js/highlightjs/languages/rust.min.js"></script>
-  <script src="/js/highlightjs/languages/ruby.min.js"></script>
-  <script src="/js/highlightjs/languages/xml.min.js"></script>
-
-  <!-- 4. Initialize highlighting -->
+  <!-- Initialize -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       hljs.highlightAll();
