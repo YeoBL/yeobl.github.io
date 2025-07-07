@@ -475,7 +475,10 @@ def triple_baka(n):
 I asked ChatGPT again and it gave me this
 
 $$
-T_1 \;=\;\mathrm{hyperbaka}(3,3,4)  = 3 \;\uparrow^4\;3 \\
+T_1 \;=\;\mathrm{hyperbaka}(3,3,4)  = 3 \;\uparrow^4\;3
+$$
+
+$$
 T_n =\mathrm{hyperbaka}\bigl(3,3,T_{n-1}\bigr) =3\;\uparrow^{\,T_{n-1}}\;3
 $$
 
@@ -501,7 +504,7 @@ triplebaka &= 3 ^ {3 ^ {3 ^ {... 3}}} (mod{\space}(m - 1)) \\
 \end{align*}
 $$
 
-Since $phi(m) \leq m$, where equality holds i.f.f $m=1$, eventually $phi(phi(...phi(m - 1)))$ reduces to $1$, which simplifies our calculations. Now we just have to find the point where $phi(phi(...phi(m - 1)))=1$, and from there we can backtrack and calculate $triplebaka (mod{\space}(m - 1))$.
+Since $phi(m) \leq m$, where equality holds i.f.f $m=1$, eventually $\phi(\phi(\cdots\phi(m - 1)))$ reduces to $1$, which simplifies our calculations. Now we just have to find the point where $\phi(\phi(\cdots\phi(m - 1)))=1$, and from there we can backtrack and calculate $triplebaka (mod{\space}(m - 1))$.
 
 #### Solving For Flag
 
